@@ -67,18 +67,20 @@ html {
 }
 
 .home-card {
-  border: 2px solid var(--home-light);
-  background: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.98));
+  border: 2px solid var(--home-accent);
+  background: linear-gradient(to bottom, var(--home-accent) 5%, rgba(255,255,255,0.95) 15%, rgba(255,255,255,0.98));
+  box-shadow: 0 4px 6px rgba(43, 64, 155, 0.1);
 }
 
 .home-button {
   background-color: var(--home-accent);
-  border: 2px solid var(--home-primary);
+  border: 2px solid var(--home-accent);
   color: white;
 }
 
 .home-button:hover {
   background-color: var(--home-primary);
+  border-color: var(--home-primary);
   transform: translateY(-2px);
 }
 
@@ -88,14 +90,20 @@ html {
 }
 
 .concept-card {
-  border: 2px solid var(--concept-accent);
-  background: linear-gradient(to bottom, var(--concept-light-2), white);
+  border: 2px solid var(--concept-light-2);
+  background: linear-gradient(to bottom, var(--concept-light-2) 0%, var(--concept-light-1) 30%, white 60%);
+  box-shadow: 0 4px 6px rgba(195, 211, 218, 0.2);
 }
 
 .concept-tag {
   background-color: var(--concept-primary);
-  border: 2px solid var(--concept-secondary);
+  border: 2px solid var(--concept-primary);
   color: var(--material-dark-2);
+}
+
+.concept-tag:hover {
+  background-color: var(--concept-secondary);
+  border-color: var(--concept-secondary);
 }
 
 /* Material Browse Styles */
@@ -104,14 +112,20 @@ html {
 }
 
 .material-card {
-  border: 2px solid var(--material-accent);
-  background: linear-gradient(to bottom, white, var(--material-primary));
+  border: 2px solid var(--material-primary);
+  background: linear-gradient(to bottom, white 0%, rgba(245, 213, 201, 0.3) 50%, var(--material-primary) 100%);
+  box-shadow: 0 4px 6px rgba(245, 213, 201, 0.3);
 }
 
 .material-tag {
   background-color: var(--material-primary);
-  border: 2px solid var(--material-secondary);
+  border: 2px solid var(--material-primary);
   color: var(--material-dark-2);
+}
+
+.material-tag:hover {
+  background-color: var(--material-accent);
+  border-color: var(--material-accent);
 }
 
 /* Masonry/Waterfall Layout */

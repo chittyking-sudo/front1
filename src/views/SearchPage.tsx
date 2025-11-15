@@ -30,7 +30,7 @@ export function SearchPage({
     <Layout>
       <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Filters Section */}
-        <div class={`${cardClass} rounded-2xl shadow-lg p-6 mb-8 border-4`} style={`border-color: ${isConcept ? 'var(--concept-accent)' : isMaterial ? 'var(--material-accent)' : 'var(--home-accent)'};`}>
+        <div class={`${cardClass} rounded-2xl shadow-lg p-6 mb-8`}>
           <h2 class="text-2xl font-bold mb-4" style={`color: ${isConcept ? 'var(--concept-secondary)' : isMaterial ? 'var(--material-secondary)' : 'var(--home-primary)'};`}>筛选条件</h2>
           
           {/* Active Filters */}
@@ -138,8 +138,7 @@ export function SearchPage({
               <div class="masonry-item">
                 <a 
                   href={`/studio/${studio.slug}`}
-                  class={`group block ${cardClass} rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-4`}
-                  style={`border-color: ${isConcept ? 'var(--concept-accent)' : isMaterial ? 'var(--material-accent)' : 'var(--home-accent)'};`}
+                  class={`group block ${cardClass} rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}
                 >
                 <div class={`${randomAspect} bg-gray-200 overflow-hidden`}>
                   {studio.cover_image_url ? (
@@ -155,7 +154,7 @@ export function SearchPage({
                   )}
                 </div>
                 
-                <div class="p-5 border-t-4" style={`border-color: ${isConcept ? 'var(--concept-primary)' : isMaterial ? 'var(--material-primary)' : 'var(--home-accent)'};`}>
+                <div class="p-5">
                   <h3 class="font-bold text-xl mb-2 group-hover:opacity-80 transition line-clamp-1" style={`color: ${isConcept ? 'var(--concept-secondary)' : isMaterial ? 'var(--material-secondary)' : 'var(--home-primary)'};`}>
                     {studio.name}
                   </h3>
@@ -167,7 +166,7 @@ export function SearchPage({
                   
                   <div class="flex items-center gap-2 text-xs mb-3 flex-wrap">
                     {studio.category && (
-                      <span class="px-3 py-1 rounded-full font-medium border-2" style={`background-color: ${isConcept ? 'var(--concept-light-2)' : isMaterial ? 'var(--material-primary)' : 'var(--home-light)'}; border-color: ${isConcept ? 'var(--concept-accent)' : isMaterial ? 'var(--material-accent)' : 'var(--home-accent)'};`}>
+                      <span class="px-3 py-1 rounded-full font-medium border-2" style={`background-color: ${isConcept ? 'var(--concept-light-2)' : isMaterial ? 'var(--material-primary)' : 'var(--home-light)'}; border-color: ${isConcept ? 'var(--concept-light-2)' : isMaterial ? 'var(--material-primary)' : 'var(--home-light)'};`}>
                         {studio.category}
                       </span>
                     )}

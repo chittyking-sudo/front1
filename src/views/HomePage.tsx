@@ -54,7 +54,7 @@ export function HomePage({
       {/* Tags Section */}
       <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         {/* Concept Tags */}
-        <div class="mb-12 p-6 rounded-2xl concept-gradient border-decorative">
+        <div class="mb-12 p-6 rounded-2xl concept-gradient border-2" style="border-color: var(--concept-primary);">
           <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-white">
             <i class="fas fa-lightbulb"></i>
             按理念浏览
@@ -74,7 +74,7 @@ export function HomePage({
         
         {/* Material Tags */}
         {materialTags.length > 0 && (
-          <div class="mb-12 p-6 rounded-2xl material-gradient border-decorative">
+          <div class="mb-12 p-6 rounded-2xl material-gradient border-2" style="border-color: var(--material-primary);">
             <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-white">
               <i class="fas fa-cube"></i>
               按材料浏览
@@ -189,7 +189,7 @@ function StudioCard({ studio }: { studio: Studio }) {
         </div>
         
         {/* Content */}
-        <div class="p-5 border-t-4" style="border-color: var(--home-accent);">
+        <div class="p-5">
           <h3 class="font-bold text-xl mb-2 group-hover:text-blue-600 transition line-clamp-1" style="color: var(--home-primary);">
             {studio.name}
           </h3>

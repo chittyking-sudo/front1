@@ -38,10 +38,10 @@ export function RegisterPage({ lang = 'zh' }: { lang?: string }) {
       <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full">
           {/* Card */}
-          <div class="home-card rounded-3xl shadow-2xl p-8 border-4" style="border-color: var(--home-accent);">
+          <div class="home-card rounded-3xl shadow-2xl p-8">
             {/* Logo */}
             <div class="text-center mb-8">
-              <div class="inline-block p-4 rounded-full mb-4" style="background-color: var(--home-light);">
+              <div class="inline-block p-4 rounded-full mb-4 border-2" style="background-color: var(--home-light); border-color: var(--home-light);">
                 <i class="fas fa-user-plus text-4xl" style="color: var(--home-primary);"></i>
               </div>
               <h2 class="text-3xl font-bold mb-2" style="color: var(--home-primary);">
@@ -116,8 +116,8 @@ export function RegisterPage({ lang = 'zh' }: { lang?: string }) {
               
               <button 
                 type="submit"
-                class="w-full py-4 rounded-xl font-bold text-white transition hover:opacity-90 shadow-lg border-2 border-white/50"
-                style="background-color: var(--home-accent);"
+                class="w-full py-4 rounded-xl font-bold text-white transition hover:opacity-90 shadow-lg border-2"
+                style="background-color: var(--home-accent); border-color: var(--home-accent);"
               >
                 {t('registerButton')}
               </button>
