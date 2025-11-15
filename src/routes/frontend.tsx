@@ -4,6 +4,8 @@ import { getAllStudios, getAllTags, getStudioBySlug } from '../db/queries'
 import { HomePage } from '../views/HomePage'
 import { StudioDetailPage } from '../views/StudioDetailPage'
 import { SearchPage } from '../views/SearchPage'
+import { LoginPage } from '../views/LoginPage'
+import { RegisterPage } from '../views/RegisterPage'
 
 const frontend = new Hono<{ Bindings: CloudflareBindings }>()
 
@@ -96,6 +98,7 @@ frontend.get('/explore', async (c) => {
     const city = c.req.query('city')
     const stage = c.req.query('stage')
     const search = c.req.query('search')
+    const type = c.req.query('type') // concept or material
     
     const studios = await getAllStudios(db, {
       limit: 50,
@@ -113,12 +116,25 @@ frontend.get('/explore', async (c) => {
         studios={studios}
         allTags={allTags}
         filters={{ category, tags, city, stage, search }}
+        browseType={type}
       />
     )
   } catch (error) {
     console.error('Error loading explore page:', error)
     return c.text('Error loading page', 500)
   }
+})
+
+// Login page
+frontend.get('/login', (c) => {
+  const lang = c.req.query('lang') || 'zh'
+  return c.render(<LoginPage lang={lang} />)
+})
+
+// Register page
+frontend.get('/register', (c) => {
+  const lang = c.req.query('lang') || 'zh'
+  return c.render(<RegisterPage lang={lang} />)
 })
 
 export default frontend

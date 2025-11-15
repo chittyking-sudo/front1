@@ -4,7 +4,8 @@ import { Layout } from '../components/Layout'
 export function SearchPage({ 
   studios,
   allTags,
-  filters 
+  filters,
+  browseType
 }: { 
   studios: Studio[]
   allTags: Tag[]
@@ -15,15 +16,22 @@ export function SearchPage({
     stage?: string
     search?: string
   }
+  browseType?: string
 }) {
   const selectedTags = filters.tags || []
+  
+  // Determine color scheme based on browse type
+  const isConcept = browseType === 'concept'
+  const isMaterial = browseType === 'material'
+  const gradientClass = isConcept ? 'concept-gradient' : isMaterial ? 'material-gradient' : 'home-gradient'
+  const cardClass = isConcept ? 'concept-card' : isMaterial ? 'material-card' : 'home-card'
   
   return (
     <Layout>
       <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Filters Section */}
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h2 class="text-xl font-bold mb-4">筛选条件</h2>
+        <div class={`${cardClass} rounded-2xl shadow-lg p-6 mb-8 border-4`} style={`border-color: ${isConcept ? 'var(--concept-accent)' : isMaterial ? 'var(--material-accent)' : 'var(--home-accent)'};`}>
+          <h2 class="text-2xl font-bold mb-4" style={`color: ${isConcept ? 'var(--concept-secondary)' : isMaterial ? 'var(--material-secondary)' : 'var(--home-primary)'};`}>筛选条件</h2>
           
           {/* Active Filters */}
           {(selectedTags.length > 0 || filters.category || filters.city || filters.stage || filters.search) && (
@@ -120,60 +128,68 @@ export function SearchPage({
           </h2>
         </div>
         
-        {/* Studios Grid */}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {studios.map(studio => (
-            <a 
-              href={`/studio/${studio.slug}`}
-              class="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-            >
-              <div class="aspect-[16/9] bg-gray-200 overflow-hidden">
-                {studio.cover_image_url ? (
-                  <img 
-                    src={studio.cover_image_url} 
-                    alt={studio.name}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div class="w-full h-full flex items-center justify-center text-gray-400">
-                    <i class="fas fa-image text-6xl"></i>
+        {/* Studios Grid - Masonry Layout */}
+        <div class="masonry-grid">
+          {studios.map(studio => {
+            const aspectRatios = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[16/9]']
+            const randomAspect = aspectRatios[Math.floor(Math.random() * aspectRatios.length)]
+            
+            return (
+              <div class="masonry-item">
+                <a 
+                  href={`/studio/${studio.slug}`}
+                  class={`group block ${cardClass} rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-4`}
+                  style={`border-color: ${isConcept ? 'var(--concept-accent)' : isMaterial ? 'var(--material-accent)' : 'var(--home-accent)'};`}
+                >
+                <div class={`${randomAspect} bg-gray-200 overflow-hidden`}>
+                  {studio.cover_image_url ? (
+                    <img 
+                      src={studio.cover_image_url} 
+                      alt={studio.name}
+                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center text-gray-400">
+                      <i class="fas fa-image text-6xl"></i>
+                    </div>
+                  )}
+                </div>
+                
+                <div class="p-5 border-t-4" style={`border-color: ${isConcept ? 'var(--concept-primary)' : isMaterial ? 'var(--material-primary)' : 'var(--home-accent)'};`}>
+                  <h3 class="font-bold text-xl mb-2 group-hover:opacity-80 transition line-clamp-1" style={`color: ${isConcept ? 'var(--concept-secondary)' : isMaterial ? 'var(--material-secondary)' : 'var(--home-primary)'};`}>
+                    {studio.name}
+                  </h3>
+                  {studio.tagline && (
+                    <p class="text-gray-700 text-sm mb-3 line-clamp-2 leading-relaxed">
+                      {studio.tagline}
+                    </p>
+                  )}
+                  
+                  <div class="flex items-center gap-2 text-xs mb-3 flex-wrap">
+                    {studio.category && (
+                      <span class="px-3 py-1 rounded-full font-medium border-2" style={`background-color: ${isConcept ? 'var(--concept-light-2)' : isMaterial ? 'var(--material-primary)' : 'var(--home-light)'}; border-color: ${isConcept ? 'var(--concept-accent)' : isMaterial ? 'var(--material-accent)' : 'var(--home-accent)'};`}>
+                        {studio.category}
+                      </span>
+                    )}
+                    {studio.city && (
+                      <span class="flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-full border-2 border-gray-200 text-gray-600">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {studio.city}
+                      </span>
+                    )}
                   </div>
-                )}
-              </div>
-              
-              <div class="p-4">
-                <h3 class="font-bold text-lg mb-1 group-hover:text-indigo-600 transition line-clamp-1">
-                  {studio.name}
-                </h3>
-                {studio.tagline && (
-                  <p class="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {studio.tagline}
-                  </p>
-                )}
-                
-                <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
-                  {studio.category && (
-                    <span class="px-2 py-1 bg-gray-100 rounded">
-                      {studio.category}
-                    </span>
-                  )}
-                  {studio.city && (
+                  
+                  <div class="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-gray-200">
                     <span class="flex items-center gap-1">
-                      <i class="fas fa-map-marker-alt"></i>
-                      {studio.city}
+                      <i class="fas fa-eye"></i>
+                      {studio.view_count}
                     </span>
-                  )}
+                  </div>
                 </div>
-                
-                <div class="flex items-center gap-4 text-xs text-gray-400">
-                  <span>
-                    <i class="fas fa-eye mr-1"></i>
-                    {studio.view_count}
-                  </span>
-                </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            </div>
+          )
+        })}
         </div>
         
         {studios.length === 0 && (

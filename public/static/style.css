@@ -1,8 +1,148 @@
 /* Custom styles for Studio Network */
 
+/* Chinese Fonts - Import from CDN */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;700&display=swap');
+
+/* Set Chinese fonts as default */
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 700;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Color Schemes */
+:root {
+  /* Home Page Colors */
+  --home-primary: #091041;
+  --home-secondary: #1A2975;
+  --home-accent: #2B409B;
+  --home-light: #8F8ABE;
+  
+  /* Concept Browse Colors */
+  --concept-primary: #EEC33B;
+  --concept-secondary: #E47336;
+  --concept-accent: #208DC7;
+  --concept-light-1: #C3D3DA;
+  --concept-light-2: #DFE8E7;
+  
+  /* Material Browse Colors */
+  --material-primary: #F5D5C9;
+  --material-secondary: #587194;
+  --material-accent: #B3C4CF;
+  --material-dark-1: #959DAE;
+  --material-dark-2: #374B4E;
+}
+
+/* Border Styles */
+.border-decorative {
+  border: 2px solid currentColor;
+  position: relative;
+}
+
+.border-decorative::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 1px solid currentColor;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Home Page Styles */
+.home-gradient {
+  background: linear-gradient(135deg, var(--home-primary) 0%, var(--home-secondary) 50%, var(--home-accent) 100%);
+}
+
+.home-card {
+  border: 2px solid var(--home-light);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.98));
+}
+
+.home-button {
+  background-color: var(--home-accent);
+  border: 2px solid var(--home-primary);
+  color: white;
+}
+
+.home-button:hover {
+  background-color: var(--home-primary);
+  transform: translateY(-2px);
+}
+
+/* Concept Browse Styles */
+.concept-gradient {
+  background: linear-gradient(135deg, var(--concept-primary) 0%, var(--concept-secondary) 50%, var(--concept-accent) 100%);
+}
+
+.concept-card {
+  border: 2px solid var(--concept-accent);
+  background: linear-gradient(to bottom, var(--concept-light-2), white);
+}
+
+.concept-tag {
+  background-color: var(--concept-primary);
+  border: 2px solid var(--concept-secondary);
+  color: var(--material-dark-2);
+}
+
+/* Material Browse Styles */
+.material-gradient {
+  background: linear-gradient(135deg, var(--material-primary) 0%, var(--material-secondary) 50%, var(--material-accent) 100%);
+}
+
+.material-card {
+  border: 2px solid var(--material-accent);
+  background: linear-gradient(to bottom, white, var(--material-primary));
+}
+
+.material-tag {
+  background-color: var(--material-primary);
+  border: 2px solid var(--material-secondary);
+  color: var(--material-dark-2);
+}
+
+/* Masonry/Waterfall Layout */
+.masonry-grid {
+  column-count: 1;
+  column-gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1280px) {
+  .masonry-grid {
+    column-count: 4;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  width: 100%;
 }
 
 /* Line clamp utilities */

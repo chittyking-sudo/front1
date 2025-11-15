@@ -1,28 +1,61 @@
-export function Layout({ children }: { children: any }) {
+import { LanguageSwitcher } from './LanguageSwitcher'
+
+export function Layout({ children, lang = 'zh' }: { children: any, lang?: string }) {
+  const t = (key: string) => {
+    const translations: Record<string, any> = {
+      zh: {
+        home: '首页',
+        explore: '探索',
+        admin: '管理',
+        login: '登录',
+        register: '注册'
+      },
+      en: {
+        home: 'Home',
+        explore: 'Explore',
+        admin: 'Admin',
+        login: 'Login',
+        register: 'Register'
+      }
+    }
+    return translations[lang]?.[key] || key
+  }
+
   return (
     <div class="min-h-screen flex flex-col">
       {/* Navigation */}
-      <nav class="bg-white shadow-sm sticky top-0 z-50">
+      <nav class="home-gradient shadow-lg sticky top-0 z-50 border-b-2 border-white/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between h-16">
             {/* Logo */}
-            <a href="/" class="flex items-center gap-2 font-bold text-xl text-indigo-600">
+            <a href="/" class="flex items-center gap-2 font-bold text-xl text-white">
               <i class="fas fa-network-wired"></i>
               <span class="hidden sm:inline">Studio Network</span>
             </a>
             
             {/* Navigation Links */}
             <div class="flex items-center gap-6">
-              <a href="/" class="text-gray-700 hover:text-indigo-600 transition font-medium">
-                首页
+              <a href="/" class="text-white/90 hover:text-white transition font-medium">
+                {t('home')}
               </a>
-              <a href="/explore" class="text-gray-700 hover:text-indigo-600 transition font-medium">
-                探索
+              <a href="/explore" class="text-white/90 hover:text-white transition font-medium">
+                {t('explore')}
               </a>
-              <a href="/admin" class="text-gray-700 hover:text-indigo-600 transition font-medium">
+              <a href="/admin" class="text-white/90 hover:text-white transition font-medium">
                 <i class="fas fa-cog mr-1"></i>
-                管理
+                {t('admin')}
               </a>
+              
+              {/* Auth Links */}
+              <a href="/login" class="text-white/90 hover:text-white transition font-medium">
+                {t('login')}
+              </a>
+              <a href="/register" class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition font-medium border-2 border-white/30">
+                {t('register')}
+              </a>
+              
+              {/* Language Switcher */}
+              <LanguageSwitcher currentLang={lang} />
             </div>
           </div>
         </div>
