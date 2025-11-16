@@ -32,9 +32,10 @@
 
 ## 功能特性
 
-### 版本1.1 (当前版本) ✅
+### 版本1.2 (当前版本) ✅
 
 #### 前台展示
+- ✅ **3D交互式Landing Page** - Three.js渲染的环形跟随鼠标移动
 - ✅ 首页（理念标签区 + 品类筛选 + **瀑布流**工作室展示）
 - ✅ 工作室详情页（完整信息 + 作品展示 + 相似推荐）
 - ✅ 筛选页面（多标签筛选 + 全文搜索 + 排序 + **瀑布流布局**）
@@ -42,12 +43,13 @@
 - ✅ **登录/注册页面**
 
 #### 设计系统
+- ✅ **3D动画效果** - Three.js渲染的3D环形，跟随鼠标移动
 - ✅ **中文字体** - Noto Sans SC / Noto Serif SC
 - ✅ **三套配色方案**：
   - 首页：深蓝渐变 (#091041, #1A2975, #2B409B, #8F8ABE)
   - 理念浏览：暖色渐变 (#EEC33B, #E47336, #208DC7, #C3D3DA, #DFE8E7)
   - 材料浏览：冷色渐变 (#F5D5C9, #587194, #B3C4CF, #959DAE, #374B4E)
-- ✅ **装饰性边框** - 双层边框效果
+- ✅ **边框与填充色统一** - 所有UI组件边框颜色与内部颜色保持一致
 - ✅ **瀑布流布局** - CSS Column布局，响应式4列
 
 #### 后台管理
@@ -89,7 +91,8 @@ npm run dev:d1
 
 4. **访问应用**
 - **Sandbox公网地址**: https://3000-ilnel7c8p64wyz5cahyk6-3844e1b6.sandbox.novita.ai
-- 本地地址: http://localhost:3000
+- Landing Page: http://localhost:3000
+- 主站首页: http://localhost:3000/home
 
 ### 目录结构
 
@@ -97,7 +100,8 @@ npm run dev:d1
 webapp/
 ├── src/
 │   ├── components/         # React组件
-│   │   └── Layout.tsx      # 页面布局
+│   │   ├── Layout.tsx             # 页面布局
+│   │   └── LanguageSwitcher.tsx   # 语言切换组件
 │   ├── db/                 # 数据库相关
 │   │   ├── init.ts         # 数据库初始化
 │   │   └── queries.ts      # 数据库查询函数
@@ -106,9 +110,12 @@ webapp/
 │   │   ├── admin.tsx       # 管理后台路由
 │   │   └── frontend.tsx    # 前台路由
 │   ├── views/              # 页面视图
+│   │   ├── LandingPage.tsx         # 3D交互式欢迎页
 │   │   ├── HomePage.tsx            # 首页
 │   │   ├── StudioDetailPage.tsx   # 工作室详情页
 │   │   ├── SearchPage.tsx          # 筛选页
+│   │   ├── LoginPage.tsx           # 登录页
+│   │   ├── RegisterPage.tsx        # 注册页
 │   │   ├── AdminDashboard.tsx      # 管理后台首页
 │   │   └── AdminStudioForm.tsx     # 工作室表单
 │   ├── index.tsx           # 主入口
@@ -213,9 +220,12 @@ npm run deploy:prod
 
 | 页面 | 路径 | 说明 |
 |------|------|------|
-| 首页 | `/` | 理念标签展示 + 工作室列表 |
+| Landing Page | `/` | 3D交互式欢迎页面 |
+| 首页 | `/home` | 理念标签展示 + 工作室列表 |
 | 工作室详情 | `/studio/:slug` | 完整工作室信息 + 作品展示 |
 | 探索页面 | `/explore` | 筛选和搜索工作室 |
+| 登录页面 | `/login` | 用户登录表单 |
+| 注册页面 | `/register` | 用户注册表单 |
 | 管理后台 | `/admin` | 工作室管理（CRUD操作） |
 | 添加工作室 | `/admin/new` | 工作室创建表单 |
 | 编辑工作室 | `/admin/edit/:slug` | 工作室编辑表单 |
