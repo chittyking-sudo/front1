@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import type { CloudflareBindings } from '../types'
 import { getAllStudios, getAllTags, getStudioBySlug } from '../db/queries'
+import { LandingPage } from '../views/LandingPage'
 import { HomePage } from '../views/HomePage'
 import { StudioDetailPage } from '../views/StudioDetailPage'
 import { SearchPage } from '../views/SearchPage'
@@ -9,8 +10,13 @@ import { RegisterPage } from '../views/RegisterPage'
 
 const frontend = new Hono<{ Bindings: CloudflareBindings }>()
 
+// Landing page
+frontend.get('/', (c) => {
+  return c.html(<LandingPage />)
+})
+
 // Home page
-frontend.get('/', async (c) => {
+frontend.get('/home', async (c) => {
   const db = c.env.DB
   
   try {
