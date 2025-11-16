@@ -1,11 +1,20 @@
-export function LandingPage({ tags }: { tags: any[] }) {
+interface Tag {
+  name: string
+  slug: string
+  color: string
+}
+
+interface LandingPageProps {
+  tags: Tag[]
+}
+
+export function LandingPage({ tags }: LandingPageProps) {
   return (
     <html lang="zh-CN">
       <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Studio Network</title>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet"/>
         <style dangerouslySetInnerHTML={{
           __html: `
             * {
@@ -17,66 +26,73 @@ export function LandingPage({ tags }: { tags: any[] }) {
             body {
               overflow: hidden;
               background: #0a0a0a;
-              font-family: 'Noto Sans SC', sans-serif;
+              font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+              cursor: none;
             }
             
             #container {
               width: 100vw;
               height: 100vh;
               position: relative;
-              cursor: none;
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
             
-            /* Custom cursor */
-            #cursor {
-              width: 20px;
-              height: 20px;
-              border: 2px solid #ffffff;
-              border-radius: 50%;
-              position: fixed;
-              pointer-events: none;
-              z-index: 9999;
-              transition: transform 0.15s ease;
-              transform: translate(-50%, -50%);
-            }
-            
-            #cursor.active {
-              transform: translate(-50%, -50%) scale(1.5);
-              background: rgba(255, 255, 255, 0.2);
-            }
-            
-            /* Ring container */
-            #ring {
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
+            #ring-container {
+              position: relative;
               width: 600px;
               height: 600px;
             }
             
-            /* Tag elements */
-            .tag {
+            .tag-item {
               position: absolute;
-              padding: 12px 24px;
-              border-radius: 50px;
-              font-size: 16px;
+              color: white;
+              font-size: 18px;
               font-weight: 500;
-              color: #ffffff;
-              border: 2px solid currentColor;
-              background: rgba(0, 0, 0, 0.5);
-              backdrop-filter: blur(10px);
-              cursor: pointer;
-              transition: all 0.3s ease;
-              transform-origin: center;
+              text-decoration: none;
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
               white-space: nowrap;
               user-select: none;
+              cursor: none;
+              transform-origin: center;
+              z-index: 10;
             }
             
-            .tag:hover {
-              transform: scale(1.1);
-              box-shadow: 0 0 30px currentColor;
-              background: rgba(0, 0, 0, 0.8);
+            .tag-item:hover {
+              font-size: 28px;
+              font-weight: 700;
+              z-index: 20;
+            }
+            
+            /* Custom cursor */
+            #cursor {
+              position: fixed;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              background: white;
+              pointer-events: none;
+              z-index: 9999;
+              transition: transform 0.15s ease, background-color 0.3s ease;
+              transform: translate(-50%, -50%);
+              mix-blend-mode: difference;
+            }
+            
+            #cursor.hover {
+              transform: translate(-50%, -50%) scale(1.5);
+            }
+            
+            /* Loading indicator */
+            #loading {
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              color: #ffffff;
+              font-size: 14px;
+              opacity: 0.5;
+              z-index: 5;
             }
             
             /* Center dot */
@@ -84,235 +100,215 @@ export function LandingPage({ tags }: { tags: any[] }) {
               position: absolute;
               top: 50%;
               left: 50%;
-              width: 12px;
-              height: 12px;
-              background: #ffffff;
+              width: 8px;
+              height: 8px;
+              background: white;
               border-radius: 50%;
               transform: translate(-50%, -50%);
-              box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-              z-index: 10;
+              z-index: 1;
+              opacity: 0.3;
             }
             
             /* Connection lines */
-            #lines {
+            svg {
               position: absolute;
-              top: 50%;
-              left: 50%;
-              width: 0;
-              height: 0;
-            }
-            
-            .line {
-              position: absolute;
-              height: 2px;
-              background: linear-gradient(90deg, transparent, currentColor, transparent);
-              transform-origin: left center;
-              opacity: 0.3;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
               pointer-events: none;
             }
             
-            /* Skip button */
-            #skip-btn {
-              position: fixed;
-              bottom: 40px;
-              right: 40px;
-              background: rgba(255, 255, 255, 0.1);
-              border: 2px solid rgba(255, 255, 255, 0.3);
-              color: #ffffff;
-              padding: 14px 28px;
-              border-radius: 50px;
-              font-family: 'Noto Sans SC', sans-serif;
-              font-size: 15px;
-              font-weight: 500;
-              cursor: pointer;
-              backdrop-filter: blur(10px);
-              transition: all 0.3s ease;
-              z-index: 10;
+            .connection-line {
+              stroke: rgba(255, 255, 255, 0.15);
+              stroke-width: 1;
+              fill: none;
             }
             
-            #skip-btn:hover {
-              background: rgba(255, 255, 255, 0.2);
-              border-color: rgba(255, 255, 255, 0.5);
-              transform: translateY(-2px);
-              box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
-            }
-            
-            /* Responsive */
             @media (max-width: 768px) {
-              #ring {
+              #ring-container {
                 width: 400px;
                 height: 400px;
               }
               
-              .tag {
-                padding: 8px 16px;
+              .tag-item {
                 font-size: 14px;
               }
-            }
-            
-            @media (max-width: 480px) {
-              #ring {
-                width: 300px;
-                height: 300px;
-              }
               
-              .tag {
-                padding: 6px 12px;
-                font-size: 12px;
+              .tag-item:hover {
+                font-size: 20px;
               }
             }
           `
         }}/>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
       </head>
       <body>
+        <div id="loading">Loading...</div>
+        <div id="cursor"></div>
+        
         <div id="container">
-          <div id="cursor"></div>
-          <div id="ring">
+          <div id="ring-container">
             <div id="center-dot"></div>
-            <div id="lines"></div>
+            <svg id="connections"></svg>
+            {tags.map((tag, index) => (
+              <a 
+                href={`/explore?tags=${tag.slug}&type=concept`}
+                class="tag-item"
+                data-index={index}
+                data-total={tags.length}
+              >
+                {tag.name}
+              </a>
+            ))}
           </div>
         </div>
-        <button id="skip-btn" onclick="window.location.href='/home'">进入主站 →</button>
         
         <script dangerouslySetInnerHTML={{
           __html: `
-            // Tags data
-            const tags = ${JSON.stringify(tags)};
+            // Configuration
+            const RADIUS = 250; // Ring radius
+            const CENTER_X = 300;
+            const CENTER_Y = 300;
+            const ROTATION_SPEED = 0.0003; // Slow rotation speed
             
-            // Custom cursor
-            const cursor = document.getElementById('cursor');
-            let cursorX = window.innerWidth / 2;
-            let cursorY = window.innerHeight / 2;
-            
-            document.addEventListener('mousemove', (e) => {
-              cursorX = e.clientX;
-              cursorY = e.clientY;
-            });
-            
-            function updateCursor() {
-              cursor.style.left = cursorX + 'px';
-              cursor.style.top = cursorY + 'px';
-              requestAnimationFrame(updateCursor);
-            }
-            updateCursor();
-            
-            // Ring setup
-            const ring = document.getElementById('ring');
-            const linesContainer = document.getElementById('lines');
-            const centerX = ring.offsetWidth / 2;
-            const centerY = ring.offsetHeight / 2;
-            const radius = Math.min(ring.offsetWidth, ring.offsetHeight) / 2 - 50;
-            
+            // State
             let rotation = 0;
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
             let targetRotation = 0;
             
-            // Create tags
-            tags.forEach((tag, index) => {
-              const tagEl = document.createElement('div');
-              tagEl.className = 'tag';
-              tagEl.textContent = tag.name;
-              tagEl.style.color = tag.color;
-              tagEl.style.borderColor = tag.color;
-              tagEl.dataset.index = index;
-              
-              // Click to navigate
-              tagEl.addEventListener('click', () => {
-                window.location.href = '/explore?tags=' + tag.slug + '&type=concept';
-              });
-              
-              // Hover effect on cursor
-              tagEl.addEventListener('mouseenter', () => {
-                cursor.classList.add('active');
-                cursor.style.borderColor = tag.color;
-              });
-              
-              tagEl.addEventListener('mouseleave', () => {
-                cursor.classList.remove('active');
-                cursor.style.borderColor = '#ffffff';
-              });
-              
-              ring.appendChild(tagEl);
-            });
+            // Get elements
+            const tagItems = document.querySelectorAll('.tag-item');
+            const cursor = document.getElementById('cursor');
+            const svg = document.getElementById('connections');
+            const loading = document.getElementById('loading');
             
-            // Create connection lines
-            tags.forEach((tag, index) => {
-              const line = document.createElement('div');
-              line.className = 'line';
-              line.style.color = tag.color;
-              linesContainer.appendChild(line);
-            });
+            // Hide loading
+            setTimeout(() => {
+              loading.style.display = 'none';
+            }, 300);
             
-            // Position tags and lines
-            function updatePositions() {
-              const tagElements = document.querySelectorAll('.tag');
-              const lineElements = document.querySelectorAll('.line');
+            // Calculate responsive radius
+            function getRadius() {
+              if (window.innerWidth < 768) {
+                return 160; // Smaller radius for mobile
+              }
+              return RADIUS;
+            }
+            
+            function getCenterX() {
+              return window.innerWidth < 768 ? 200 : CENTER_X;
+            }
+            
+            function getCenterY() {
+              return window.innerHeight < 768 ? 200 : CENTER_Y;
+            }
+            
+            // Position tags in a circle
+            function positionTags() {
+              const radius = getRadius();
+              const centerX = getCenterX();
+              const centerY = getCenterY();
+              const totalTags = tagItems.length;
               
-              tagElements.forEach((tagEl, index) => {
-                const angle = (rotation + (index / tags.length) * Math.PI * 2);
+              tagItems.forEach((tag, index) => {
+                const angle = (index / totalTags) * Math.PI * 2 + rotation;
                 const x = centerX + Math.cos(angle) * radius;
                 const y = centerY + Math.sin(angle) * radius;
                 
-                tagEl.style.left = x + 'px';
-                tagEl.style.top = y + 'px';
-                tagEl.style.transform = 'translate(-50%, -50%)';
+                tag.style.left = x + 'px';
+                tag.style.top = y + 'px';
+                tag.style.transform = 'translate(-50%, -50%)';
               });
               
-              // Update lines
-              lineElements.forEach((line, index) => {
-                const nextIndex = (index + 1) % tags.length;
-                
-                const angle1 = (rotation + (index / tags.length) * Math.PI * 2);
-                const angle2 = (rotation + (nextIndex / tags.length) * Math.PI * 2);
-                
-                const x1 = Math.cos(angle1) * radius;
-                const y1 = Math.sin(angle1) * radius;
-                const x2 = Math.cos(angle2) * radius;
-                const y2 = Math.sin(angle2) * radius;
-                
-                const dx = x2 - x1;
-                const dy = y2 - y1;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const angle = Math.atan2(dy, dx);
-                
-                line.style.width = distance + 'px';
-                line.style.left = x1 + 'px';
-                line.style.top = y1 + 'px';
-                line.style.transform = \`rotate(\${angle}rad)\`;
-              });
+              drawConnections();
             }
             
-            // Mouse influence on rotation
+            // Draw connection lines between tags
+            function drawConnections() {
+              const radius = getRadius();
+              const centerX = getCenterX();
+              const centerY = getCenterY();
+              const totalTags = tagItems.length;
+              
+              let pathData = '';
+              
+              for (let i = 0; i < totalTags; i++) {
+                const angle1 = (i / totalTags) * Math.PI * 2 + rotation;
+                const angle2 = ((i + 1) / totalTags) * Math.PI * 2 + rotation;
+                
+                const x1 = centerX + Math.cos(angle1) * radius;
+                const y1 = centerY + Math.sin(angle1) * radius;
+                const x2 = centerX + Math.cos(angle2) * radius;
+                const y2 = centerY + Math.sin(angle2) * radius;
+                
+                if (i === 0) {
+                  pathData += \`M \${x1} \${y1} \`;
+                }
+                pathData += \`L \${x2} \${y2} \`;
+              }
+              
+              // Close the ring
+              pathData += 'Z';
+              
+              svg.innerHTML = \`<path class="connection-line" d="\${pathData}" />\`;
+            }
+            
+            // Mouse move handler
             document.addEventListener('mousemove', (e) => {
-              const centerScreenX = window.innerWidth / 2;
-              const centerScreenY = window.innerHeight / 2;
+              mouseX = e.clientX;
+              mouseY = e.clientY;
               
-              const dx = e.clientX - centerScreenX;
-              const dy = e.clientY - centerScreenY;
+              // Update cursor position
+              cursor.style.left = mouseX + 'px';
+              cursor.style.top = mouseY + 'px';
               
-              // Calculate target rotation based on mouse position
-              targetRotation = Math.atan2(dy, dx) * 0.3;
+              // Calculate rotation based on mouse position
+              const containerRect = document.getElementById('ring-container').getBoundingClientRect();
+              const containerCenterX = containerRect.left + containerRect.width / 2;
+              const containerCenterY = containerRect.top + containerRect.height / 2;
+              
+              const deltaX = mouseX - containerCenterX;
+              const deltaY = mouseY - containerCenterY;
+              
+              // Calculate target rotation (mouse influences rotation)
+              targetRotation = Math.atan2(deltaY, deltaX) * 0.1;
+            });
+            
+            // Tag hover effects
+            tagItems.forEach(tag => {
+              tag.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+              });
+              
+              tag.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+              });
             });
             
             // Animation loop
             function animate() {
-              // Smooth rotation following mouse
+              // Smooth rotation interpolation
               rotation += (targetRotation - rotation) * 0.05;
               
-              // Auto rotation
-              rotation += 0.002;
+              // Continuous slow rotation
+              rotation += ROTATION_SPEED;
               
-              updatePositions();
+              // Update positions
+              positionTags();
+              
               requestAnimationFrame(animate);
             }
             
-            // Start animation
-            animate();
-            
             // Handle window resize
             window.addEventListener('resize', () => {
-              // Recalculate positions
-              updatePositions();
+              positionTags();
             });
+            
+            // Initial setup
+            positionTags();
+            animate();
           `
         }}/>
       </body>
