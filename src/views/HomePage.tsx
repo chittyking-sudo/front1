@@ -15,18 +15,19 @@ export function HomePage({
     <Layout>
       {/* Tag Navigation */}
       <TagNavigation tags={conceptTags} />
-      {/* Tag Ring Hero Section */}
-      <div class="home-gradient text-white" style="position: relative; min-height: 70vh; display: flex; align-items: center; justify-content: center;">
-        <div id="ring-container" style="position: relative; width: 600px; height: 600px;">
-          <div id="center-dot" style="position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: white; border-radius: 50%; transform: translate(-50%, -50%); z-index: 1; opacity: 0.3;"></div>
-          <svg id="connections" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></svg>
-          {conceptTags.map((tag, index) => (
+      {/* Hero Section with Hand Background */}
+      <div class="hero-section" style="position: relative; height: 100vh; overflow: hidden; background: linear-gradient(135deg, #8BA5B0 0%, #A8BCC4 100%);">
+        {/* Background Image */}
+        <div style="position: absolute; inset: 0; background-image: url('https://www.genspark.ai/api/files/s/kH9Pk265'); background-size: cover; background-position: center; opacity: 0.95;"></div>
+        
+        {/* Tags along fingers */}
+        <div id="finger-tags" style="position: absolute; inset: 0;">
+          {conceptTags.slice(0, 10).map((tag, index) => (
             <a 
               href={`/explore?tags=${tag.slug}&type=concept`}
-              class="tag-item"
+              class="finger-tag"
               data-index={index}
-              data-total={conceptTags.length}
-              style="position: absolute; color: white; font-size: 18px; font-weight: 500; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; user-select: none; cursor: pointer; transform-origin: center; z-index: 10;"
+              style="position: absolute; color: white; font-size: 16px; font-weight: 600; text-decoration: none; text-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: all 0.3s ease; white-space: nowrap; cursor: pointer; z-index: 10; letter-spacing: 0.05em;"
             >
               {tag.name}
             </a>
@@ -77,125 +78,73 @@ export function HomePage({
         )}
       </div>
       
-      {/* Tag Ring Script */}
+      {/* Finger Tags Script */}
       <script dangerouslySetInnerHTML={{
         __html: `
           (function() {
-            const RADIUS = 250;
-            const CENTER_X = 300;
-            const CENTER_Y = 300;
-            const ROTATION_SPEED = 0.0003;
-            
-            let rotation = 0;
-            let mouseX = window.innerWidth / 2;
-            let mouseY = window.innerHeight / 2;
-            let targetRotation = 0;
-            
-            const tagItems = document.querySelectorAll('.tag-item');
+            const fingerTags = document.querySelectorAll('.finger-tag');
             const cursor = document.getElementById('cursor');
-            const svg = document.getElementById('connections');
             
-            function getRadius() {
-              return window.innerWidth < 768 ? 160 : RADIUS;
-            }
-            
-            function getCenterX() {
-              return window.innerWidth < 768 ? 200 : CENTER_X;
-            }
-            
-            function getCenterY() {
-              return window.innerWidth < 768 ? 200 : CENTER_Y;
-            }
+            // Define positions along the white lines on fingers (in percentages of viewport)
+            // These positions trace the white text lines in the hand image
+            const fingerPositions = [
+              { x: 15, y: 68, rotation: -25 },   // Thumb base - left hand
+              { x: 22, y: 58, rotation: -15 },   // Thumb mid
+              { x: 28, y: 48, rotation: -8 },    // Index base
+              { x: 35, y: 38, rotation: 0 },     // Index mid
+              { x: 42, y: 28, rotation: 5 },     // Middle base
+              { x: 48, y: 20, rotation: 8 },     // Middle mid
+              { x: 55, y: 18, rotation: 12 },    // Ring base
+              { x: 62, y: 22, rotation: 15 },    // Ring mid
+              { x: 68, y: 28, rotation: 18 },    // Pinky base
+              { x: 72, y: 35, rotation: 20 }     // Pinky mid
+            ];
             
             function positionTags() {
-              const radius = getRadius();
-              const centerX = getCenterX();
-              const centerY = getCenterY();
-              const totalTags = tagItems.length;
+              const vw = window.innerWidth;
+              const vh = window.innerHeight;
               
-              tagItems.forEach((tag, index) => {
-                const angle = (index / totalTags) * Math.PI * 2 + rotation;
-                const x = centerX + Math.cos(angle) * radius;
-                const y = centerY + Math.sin(angle) * radius;
-                
-                tag.style.left = x + 'px';
-                tag.style.top = y + 'px';
-                tag.style.transform = 'translate(-50%, -50%)';
-              });
-              
-              drawConnections();
-            }
-            
-            function drawConnections() {
-              const radius = getRadius();
-              const centerX = getCenterX();
-              const centerY = getCenterY();
-              const totalTags = tagItems.length;
-              
-              let pathData = '';
-              
-              for (let i = 0; i < totalTags; i++) {
-                const angle1 = (i / totalTags) * Math.PI * 2 + rotation;
-                const angle2 = ((i + 1) / totalTags) * Math.PI * 2 + rotation;
-                
-                const x1 = centerX + Math.cos(angle1) * radius;
-                const y1 = centerY + Math.sin(angle1) * radius;
-                const x2 = centerX + Math.cos(angle2) * radius;
-                const y2 = centerY + Math.sin(angle2) * radius;
-                
-                if (i === 0) {
-                  pathData += 'M ' + x1 + ' ' + y1 + ' ';
+              fingerTags.forEach((tag, index) => {
+                if (index < fingerPositions.length) {
+                  const pos = fingerPositions[index];
+                  const x = (pos.x / 100) * vw;
+                  const y = (pos.y / 100) * vh;
+                  
+                  tag.style.left = x + 'px';
+                  tag.style.top = y + 'px';
+                  tag.style.transform = 'translate(-50%, -50%) rotate(' + pos.rotation + 'deg)';
                 }
-                pathData += 'L ' + x2 + ' ' + y2 + ' ';
-              }
-              
-              pathData += 'Z';
-              svg.innerHTML = '<path style="stroke: rgba(255, 255, 255, 0.15); stroke-width: 1; fill: none;" d="' + pathData + '" />';
+              });
             }
             
+            // Mouse cursor
             document.addEventListener('mousemove', (e) => {
-              mouseX = e.clientX;
-              mouseY = e.clientY;
-              
-              cursor.style.left = mouseX + 'px';
-              cursor.style.top = mouseY + 'px';
-              
-              const containerRect = document.getElementById('ring-container').getBoundingClientRect();
-              const containerCenterX = containerRect.left + containerRect.width / 2;
-              const containerCenterY = containerRect.top + containerRect.height / 2;
-              
-              const deltaX = mouseX - containerCenterX;
-              const deltaY = mouseY - containerCenterY;
-              
-              targetRotation = Math.atan2(deltaY, deltaX) * 0.1;
+              cursor.style.left = e.clientX + 'px';
+              cursor.style.top = e.clientY + 'px';
             });
             
-            tagItems.forEach(tag => {
+            // Tag hover effects
+            fingerTags.forEach(tag => {
               tag.addEventListener('mouseenter', () => {
-                tag.style.fontSize = '28px';
+                tag.style.fontSize = '20px';
                 tag.style.fontWeight = '700';
-                tag.style.zIndex = '20';
+                tag.style.transform = tag.style.transform.replace('scale(1)', 'scale(1.2)');
                 cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
               });
               
               tag.addEventListener('mouseleave', () => {
-                tag.style.fontSize = '18px';
-                tag.style.fontWeight = '500';
-                tag.style.zIndex = '10';
+                tag.style.fontSize = '16px';
+                tag.style.fontWeight = '600';
+                tag.style.transform = tag.style.transform.replace('scale(1.2)', 'scale(1)');
                 cursor.style.transform = 'translate(-50%, -50%) scale(1)';
               });
             });
             
-            function animate() {
-              rotation += (targetRotation - rotation) * 0.05;
-              rotation += ROTATION_SPEED;
-              positionTags();
-              requestAnimationFrame(animate);
-            }
-            
-            window.addEventListener('resize', positionTags);
+            // Initialize positions
             positionTags();
-            animate();
+            
+            // Responsive positioning
+            window.addEventListener('resize', positionTags);
           })();
         `
       }}/>
