@@ -131,32 +131,66 @@ html {
 /* Masonry/Waterfall Layout */
 .masonry-grid {
   column-count: 1;
-  column-gap: 1.5rem;
+  column-gap: 1rem;
 }
 
 @media (min-width: 640px) {
   .masonry-grid {
     column-count: 2;
+    column-gap: 1rem;
   }
 }
 
 @media (min-width: 1024px) {
   .masonry-grid {
     column-count: 3;
+    column-gap: 1.25rem;
   }
 }
 
 @media (min-width: 1280px) {
   .masonry-grid {
     column-count: 4;
+    column-gap: 1.5rem;
   }
 }
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   display: inline-block;
   width: 100%;
+}
+
+/* Add staggered effect - nth-child offset */
+.masonry-item:nth-child(3n+1) {
+  margin-top: 0;
+}
+
+.masonry-item:nth-child(3n+2) {
+  margin-top: 2rem;
+}
+
+.masonry-item:nth-child(3n+3) {
+  margin-top: 4rem;
+}
+
+@media (min-width: 1280px) {
+  .masonry-item:nth-child(4n+1) {
+    margin-top: 0;
+  }
+  
+  .masonry-item:nth-child(4n+2) {
+    margin-top: 2.5rem;
+  }
+  
+  .masonry-item:nth-child(4n+3) {
+    margin-top: 5rem;
+  }
+  
+  .masonry-item:nth-child(4n+4) {
+    margin-top: 1.5rem;
+  }
 }
 
 /* Line clamp utilities */
