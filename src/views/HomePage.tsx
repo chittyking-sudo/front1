@@ -28,19 +28,28 @@ export function HomePage({
             }
             
             body {
-              font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+              font-family: 'SimSun', '宋体', serif;
               cursor: none;
               overflow-x: hidden;
             }
             
             .finger-tag {
-              cursor: none !important;
+              cursor: pointer !important;
             }
             
             .finger-tag:hover {
               font-size: 18px !important;
               font-weight: 700 !important;
               text-shadow: 0 4px 16px rgba(255,255,255,0.4) !important;
+            }
+            
+            a, button {
+              cursor: pointer !important;
+            }
+            
+            .masonry-item a {
+              cursor: pointer !important;
+              display: block;
             }
           `
         }}/>
