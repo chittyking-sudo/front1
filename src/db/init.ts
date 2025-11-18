@@ -428,4 +428,93 @@ async function insertSeedData(db: D1Database): Promise<void> {
     
     console.log(`✅ Added product concepts and timeline for sample studio`)
   }
+  
+  // Add gallery images for each studio
+  const galleryImages = [
+    // Minimalist Pottery (极简陶艺工作室)
+    { slug: 'minimalist-pottery', url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600', alt: '陶艺作品细节' },
+    { slug: 'minimalist-pottery', url: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600', alt: '简约茶具套装' },
+    { slug: 'minimalist-pottery', url: 'https://images.unsplash.com/photo-1580911427626-51e54dc3e1ad?w=600', alt: '陶瓷花瓶系列' },
+    { slug: 'minimalist-pottery', url: 'https://images.unsplash.com/photo-1565191999001-551c187427bb?w=600', alt: '手工陶碗' },
+    
+    // Wabi-sabi Woodwork (侘寂美学木工坊)
+    { slug: 'wabi-sabi-woodwork', url: 'https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=600', alt: '原木家具' },
+    { slug: 'wabi-sabi-woodwork', url: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=600', alt: '木质餐桌' },
+    { slug: 'wabi-sabi-woodwork', url: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600', alt: '手工木勺' },
+    { slug: 'wabi-sabi-woodwork', url: 'https://images.unsplash.com/photo-1617098900591-3f90928e8c54?w=600', alt: '木工工艺细节' },
+    
+    // Future Fashion (未来感服装设计)
+    { slug: 'future-fashion', url: 'https://images.unsplash.com/photo-1558769132-cb1aea94f4fa?w=600', alt: '科技感外套' },
+    { slug: 'future-fashion', url: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600', alt: '未来主义设计' },
+    { slug: 'future-fashion', url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600', alt: '时尚配饰' },
+    { slug: 'future-fashion', url: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600', alt: '服装细节' },
+    
+    // Vintage Illustration (复古插画工作室)
+    { slug: 'vintage-illustration', url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600', alt: '复古海报' },
+    { slug: 'vintage-illustration', url: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600', alt: '插画作品集' },
+    { slug: 'vintage-illustration', url: 'https://images.unsplash.com/photo-1499892477393-f675706cbe6e?w=600', alt: '手绘草图' },
+    { slug: 'vintage-illustration', url: 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=600', alt: '色彩研究' },
+    
+    // Handmade Leather (手工皮具工坊)
+    { slug: 'handmade-leather', url: 'https://images.unsplash.com/photo-1517646287270-fe29a1220c00?w=600', alt: '手工皮包' },
+    { slug: 'handmade-leather', url: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600', alt: '皮革钱包' },
+    { slug: 'handmade-leather', url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', alt: '皮具工艺' },
+    { slug: 'handmade-leather', url: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?w=600', alt: '手工缝制' },
+    
+    // Oriental Tea House (东方意境茶室)
+    { slug: 'oriental-tea-house', url: 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=600', alt: '茶室空间' },
+    { slug: 'oriental-tea-house', url: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=600', alt: '茶具陈设' },
+    { slug: 'oriental-tea-house', url: 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600', alt: '茶道体验' },
+    { slug: 'oriental-tea-house', url: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600', alt: '东方禅意' },
+    
+    // Natural Home (自然主义家居)
+    { slug: 'natural-home', url: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600', alt: '自然家居' },
+    { slug: 'natural-home', url: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600', alt: '木质装饰' },
+    { slug: 'natural-home', url: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=600', alt: '植物陈设' },
+    { slug: 'natural-home', url: 'https://images.unsplash.com/photo-1522444195799-478538b28823?w=600', alt: '温馨客厅' },
+    
+    // Industrial Metal (工业风金属工作室)
+    { slug: 'industrial-metal', url: 'https://images.unsplash.com/photo-1565191999001-551c187427bb?w=600', alt: '金属工艺品' },
+    { slug: 'industrial-metal', url: 'https://images.unsplash.com/photo-1504855328839-e3a4c16b65a6?w=600', alt: '工业风灯具' },
+    { slug: 'industrial-metal', url: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600', alt: '金属雕塑' },
+    { slug: 'industrial-metal', url: 'https://images.unsplash.com/photo-1572635148818-ef6fd45eb394?w=600', alt: '金属家具' },
+    
+    // Nordic Home (北欧简约家居)
+    { slug: 'nordic-home', url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600', alt: '北欧客厅' },
+    { slug: 'nordic-home', url: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=600', alt: '简约卧室' },
+    { slug: 'nordic-home', url: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600', alt: '北欧厨房' },
+    { slug: 'nordic-home', url: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600', alt: '餐厅布置' },
+    
+    // Modern Pottery (现代陶瓷艺术)
+    { slug: 'modern-pottery', url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600', alt: '现代陶艺' },
+    { slug: 'modern-pottery', url: 'https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=600', alt: '陶瓷餐具' },
+    { slug: 'modern-pottery', url: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600', alt: '茶具系列' },
+    { slug: 'modern-pottery', url: 'https://images.unsplash.com/photo-1603296045538-498e59016b35?w=600', alt: '陶瓷花器' },
+    
+    // Handmade Fabric (手作布艺工坊)
+    { slug: 'handmade-fabric', url: 'https://images.unsplash.com/photo-1487376480913-24046456a727?w=600', alt: '布艺作品' },
+    { slug: 'handmade-fabric', url: 'https://images.unsplash.com/photo-1558769132-cb1aea94f4fa?w=600', alt: '手工刺绣' },
+    { slug: 'handmade-fabric', url: 'https://images.unsplash.com/photo-1610632380989-680fe40816c6?w=600', alt: '布料质感' },
+    { slug: 'handmade-fabric', url: 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=600', alt: '纺织工艺' },
+    
+    // Vintage Jewelry (复古金工饰品)
+    { slug: 'vintage-jewelry', url: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600', alt: '复古首饰' },
+    { slug: 'vintage-jewelry', url: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600', alt: '手工戒指' },
+    { slug: 'vintage-jewelry', url: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600', alt: '金工工艺' },
+    { slug: 'vintage-jewelry', url: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600', alt: '首饰陈列' },
+  ]
+  
+  for (const img of galleryImages) {
+    const studioRecord = await db.prepare(
+      `SELECT id FROM studios WHERE slug = ?`
+    ).bind(img.slug).first()
+    
+    if (studioRecord) {
+      await db.prepare(
+        `INSERT OR IGNORE INTO images (studio_id, url, alt_text, status) VALUES (?, ?, ?, 'approved')`
+      ).bind(studioRecord.id, img.url, img.alt).run()
+    }
+  }
+  
+  console.log(`✅ Inserted ${galleryImages.length} gallery images for all studios`)
 }
