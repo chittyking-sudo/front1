@@ -27,7 +27,7 @@ frontend.get('/', async (c) => {
       return acc
     }, {} as Record<string, typeof tags>)
     
-    return c.render(
+    return c.html(
       <HomePage 
         tags={tagsByCategory} 
         studios={studios}
