@@ -9,6 +9,9 @@ export function HomePage({
 }) {
   const conceptTags = tags.concept || []
   
+  // Set target date: February 1, 2025 00:00:00
+  const targetDate = new Date('2025-02-01T00:00:00').getTime()
+  
   return (
     <html lang="zh-CN">
       <head>
@@ -28,8 +31,61 @@ export function HomePage({
             
             body {
               font-family: 'SimSun', '宋体', serif;
-              cursor: none;
+              cursor: default;
               overflow-x: hidden;
+              background: linear-gradient(135deg, #0a1628 0%, #1e3a5f 50%, #2a5298 100%);
+            }
+            
+            .countdown-container {
+              background: rgba(255, 255, 255, 0.05);
+              backdrop-filter: blur(20px);
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              border-radius: 24px;
+              padding: 48px 64px;
+              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            }
+            
+            .countdown-item {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 12px;
+            }
+            
+            .countdown-number {
+              font-size: 72px;
+              font-weight: 700;
+              color: white;
+              line-height: 1;
+              text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+            }
+            
+            .countdown-label {
+              font-size: 20px;
+              color: rgba(255, 255, 255, 0.8);
+              font-weight: 400;
+              letter-spacing: 0.05em;
+            }
+            
+            @keyframes float {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-20px); }
+            }
+            
+            .floating-element {
+              animation: float 6s ease-in-out infinite;
+            }
+            
+            @keyframes pulse {
+              0%, 100% { opacity: 0.3; }
+              50% { opacity: 0.6; }
+            }
+            
+            .background-blur {
+              position: absolute;
+              border-radius: 50%;
+              filter: blur(100px);
+              animation: pulse 8s ease-in-out infinite;
             }
             
             .finger-tag {
@@ -46,27 +102,67 @@ export function HomePage({
         }}/>
       </head>
       <body>
-        {/* Hero Section with Hand Background - Full Screen */}
-        <div style="position: relative; height: 100vh; width: 100vw; overflow: hidden;">
-          {/* Hand Background Image */}
-          <div style="position: absolute; inset: 0; background-image: url('https://www.genspark.ai/api/files/s/kH9Pk265'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
+        {/* Landing Page with Countdown */}
+        <div style="position: relative; min-height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;">
+          {/* Animated Background Elements */}
+          <div class="background-blur" style="top: 10%; left: 15%; width: 400px; height: 400px; background: rgba(138, 43, 226, 0.3);"></div>
+          <div class="background-blur" style="top: 60%; right: 10%; width: 500px; height: 500px; background: rgba(220, 20, 60, 0.3); animation-delay: 2s;"></div>
+          <div class="background-blur" style="bottom: 20%; left: 40%; width: 350px; height: 350px; background: rgba(30, 144, 255, 0.3); animation-delay: 4s;"></div>
           
-          {/* Tags along white lines on fingers */}
-          <div id="finger-tags-container">
-            {conceptTags.slice(0, 10).map((tag, index) => (
+          {/* Main Content */}
+          <div class="floating-element" style="text-align: center; z-index: 10; max-width: 1200px; width: 100%;">
+            {/* Title */}
+            <h1 style="font-size: 64px; font-weight: 700; color: white; margin-bottom: 16px; text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); line-height: 1.2;">
+              Segment Anything
+            </h1>
+            
+            {/* Subtitle */}
+            <p style="font-size: 28px; color: rgba(255, 255, 255, 0.85); margin-bottom: 64px; font-weight: 300; letter-spacing: 0.02em;">
+              A playground for interactive media
+            </p>
+            
+            {/* Countdown Container */}
+            <div class="countdown-container">
+              <div style="display: flex; gap: 48px; justify-content: center; align-items: center;">
+                {/* Days */}
+                <div class="countdown-item">
+                  <div id="days" class="countdown-number">01</div>
+                  <div class="countdown-label">Days</div>
+                </div>
+                
+                {/* Hours */}
+                <div class="countdown-item">
+                  <div id="hours" class="countdown-number">01</div>
+                  <div class="countdown-label">Hours</div>
+                </div>
+                
+                {/* Minutes */}
+                <div class="countdown-item">
+                  <div id="minutes" class="countdown-number">18</div>
+                  <div class="countdown-label">Min</div>
+                </div>
+                
+                {/* Seconds */}
+                <div class="countdown-item">
+                  <div id="seconds" class="countdown-number">25</div>
+                  <div class="countdown-label">Sec</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Enter Button */}
+            <div style="margin-top: 48px;">
               <a 
-                href={`/explore?tags=${tag.slug}&type=concept`}
-                class="finger-tag"
-                data-index={index}
-                style="position: absolute; color: white; font-size: 14px; font-weight: 600; text-decoration: none; text-shadow: 0 2px 10px rgba(0,0,0,0.4); transition: all 0.3s ease; white-space: nowrap; z-index: 10; letter-spacing: 0.08em; text-transform: uppercase;"
+                href="/explore"
+                style="display: inline-block; padding: 16px 48px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 50px; color: white; font-size: 18px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);"
+                onmouseover="this.style.background='rgba(255, 255, 255, 0.25)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 48px rgba(0, 0, 0, 0.3)';"
+                onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0, 0, 0, 0.2)';"
               >
-                {tag.name}
+                <i class="fas fa-rocket" style="margin-right: 12px;"></i>
+                进入探索
               </a>
-            ))}
+            </div>
           </div>
-          
-          {/* Custom Cursor */}
-          <div id="cursor" style="position: fixed; width: 20px; height: 20px; border-radius: 50%; background: white; pointer-events: none; z-index: 9999; transition: transform 0.15s ease; transform: translate(-50%, -50%); mix-blend-mode: difference;"></div>
         </div>
         
         {/* Gallery Section - Image Masonry */}
@@ -111,67 +207,42 @@ export function HomePage({
           </div>
         </div>
         
-        {/* Finger Tags Positioning Script */}
+        {/* Countdown Timer Script */}
         <script dangerouslySetInnerHTML={{
           __html: `
             (function() {
-              const fingerTags = document.querySelectorAll('.finger-tag');
-              const cursor = document.getElementById('cursor');
+              // Target date: February 1, 2025 00:00:00
+              const targetDate = new Date('2025-02-01T00:00:00').getTime();
               
-              // Positions along the white text lines in the hand image
-              const fingerPositions = [
-                { x: 12, y: 75, rotation: -30 },
-                { x: 17, y: 65, rotation: -25 },
-                { x: 24, y: 52, rotation: -15 },
-                { x: 32, y: 40, rotation: -8 },
-                { x: 40, y: 28, rotation: 0 },
-                { x: 48, y: 18, rotation: 5 },
-                { x: 57, y: 15, rotation: 10 },
-                { x: 65, y: 18, rotation: 15 },
-                { x: 72, y: 25, rotation: 20 },
-                { x: 78, y: 35, rotation: 25 }
-              ];
-              
-              function positionTags() {
-                const vw = window.innerWidth;
-                const vh = window.innerHeight;
+              function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
                 
-                fingerTags.forEach((tag, index) => {
-                  if (index < fingerPositions.length) {
-                    const pos = fingerPositions[index];
-                    const x = (pos.x / 100) * vw;
-                    const y = (pos.y / 100) * vh;
-                    
-                    tag.style.left = x + 'px';
-                    tag.style.top = y + 'px';
-                    tag.style.transform = 'translate(-50%, -50%) rotate(' + pos.rotation + 'deg)';
-                  }
-                });
+                if (distance < 0) {
+                  document.getElementById('days').textContent = '00';
+                  document.getElementById('hours').textContent = '00';
+                  document.getElementById('minutes').textContent = '00';
+                  document.getElementById('seconds').textContent = '00';
+                  return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                // Pad with leading zeros
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
               }
               
-              document.addEventListener('mousemove', (e) => {
-                if (cursor) {
-                  cursor.style.left = e.clientX + 'px';
-                  cursor.style.top = e.clientY + 'px';
-                }
-              });
+              // Update countdown immediately
+              updateCountdown();
               
-              fingerTags.forEach(tag => {
-                tag.addEventListener('mouseenter', () => {
-                  if (cursor) {
-                    cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-                  }
-                });
-                
-                tag.addEventListener('mouseleave', () => {
-                  if (cursor) {
-                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-                  }
-                });
-              });
-              
-              positionTags();
-              window.addEventListener('resize', positionTags);
+              // Update every second
+              setInterval(updateCountdown, 1000);
             })();
           `
         }}/>
