@@ -28,14 +28,14 @@ export function Layout({ children, lang = 'zh' }: { children: any, lang?: string
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between h-16">
             {/* Logo */}
-            <a href="/home" class="flex items-center gap-2 font-bold text-xl text-white">
+            <a href="/" class="flex items-center gap-2 font-bold text-xl text-white">
               <i class="fas fa-network-wired"></i>
               <span class="hidden sm:inline">Studio Network</span>
             </a>
             
             {/* Navigation Links */}
             <div class="flex items-center gap-6">
-              <a href="/home" class="text-white/90 hover:text-white transition font-medium">
+              <a href="/" class="text-white/90 hover:text-white transition font-medium">
                 {t('home')}
               </a>
               <a href="/explore" class="text-white/90 hover:text-white transition font-medium">
@@ -80,7 +80,7 @@ export function Layout({ children, lang = 'zh' }: { children: any, lang?: string
             <div>
               <h3 class="text-white font-bold mb-4">快速链接</h3>
               <ul class="space-y-2 text-sm">
-                <li><a href="/home" class="hover:text-white transition">首页</a></li>
+                <li><a href="/" class="hover:text-white transition">首页</a></li>
                 <li><a href="/explore" class="hover:text-white transition">探索工作室</a></li>
                 <li><a href="/admin" class="hover:text-white transition">管理后台</a></li>
               </ul>

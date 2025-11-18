@@ -1,7 +1,6 @@
 import { Hono } from 'hono'
 import type { CloudflareBindings } from '../types'
 import { getAllStudios, getAllTags, getStudioBySlug } from '../db/queries'
-import { LandingPage } from '../views/LandingPage'
 import { HomePage } from '../views/HomePage'
 import { StudioDetailPage } from '../views/StudioDetailPage'
 import { SearchPage } from '../views/SearchPage'
@@ -10,36 +9,8 @@ import { RegisterPage } from '../views/RegisterPage'
 
 const frontend = new Hono<{ Bindings: CloudflareBindings }>()
 
-// Landing page
+// Home page (now at root)
 frontend.get('/', async (c) => {
-  const db = c.env.DB
-  
-  try {
-    // Get concept tags for the ring
-    const { results } = await db.prepare(
-      `SELECT name, slug, color FROM tags WHERE category = 'concept' AND status = 'active' ORDER BY name`
-    ).all()
-    
-    return c.html(<LandingPage tags={results} />)
-  } catch (error) {
-    console.error('Error loading landing page:', error)
-    // Fallback with default tags
-    const defaultTags = [
-      { name: '极简主义', slug: 'minimalism', color: '#64748b' },
-      { name: '侘寂美学', slug: 'wabi-sabi', color: '#92400e' },
-      { name: '未来感', slug: 'futurism', color: '#7c3aed' },
-      { name: '复古怀旧', slug: 'vintage', color: '#c2410c' },
-      { name: '手工温度', slug: 'handmade', color: '#ea580c' },
-      { name: '东方美学', slug: 'oriental', color: '#dc2626' },
-      { name: '自然主义', slug: 'naturalism', color: '#16a34a' },
-      { name: '工业风', slug: 'industrial', color: '#475569' }
-    ]
-    return c.html(<LandingPage tags={defaultTags} />)
-  }
-})
-
-// Home page
-frontend.get('/home', async (c) => {
   const db = c.env.DB
   
   try {

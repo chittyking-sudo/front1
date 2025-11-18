@@ -1,5 +1,6 @@
 import type { Tag, Studio } from '../types'
 import { Layout } from '../components/Layout'
+import { TagNavigation } from '../components/TagNavigation'
 
 export function HomePage({ 
   tags, 
@@ -9,224 +10,195 @@ export function HomePage({
   studios: Studio[]
 }) {
   const conceptTags = tags.concept || []
-  const materialTags = tags.material || []
-  
-  // Get unique categories and cities for filters
-  const categories = [...new Set(studios.map(s => s.category).filter(Boolean))]
-  const cities = [...new Set(studios.map(s => s.city).filter(Boolean))]
   
   return (
     <Layout>
-      {/* Hero Section */}
-      <div class="home-gradient text-white border-b-4 border-white/20">
-        <div class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-          <div class="text-center">
-            <h1 class="text-4xl sm:text-5xl font-bold mb-4 tracking-wide">
-              独立工作室展示网络
-            </h1>
-            <p class="text-xl sm:text-2xl mb-8 text-white/90 font-light">
-              跨行业按理念发现相似的创作者
-            </p>
-            
-            {/* Search bar */}
-            <form action="/explore" method="GET" class="max-w-2xl mx-auto">
-              <div class="flex gap-2">
-                <input 
-                  type="text" 
-                  name="search" 
-                  placeholder="搜索工作室、理念标签..." 
-                  class="flex-1 px-6 py-4 rounded-full text-gray-900 text-lg focus:outline-none focus:ring-4 focus:ring-white/30 border-2 border-white/50 shadow-lg"
-                />
-                <button 
-                  type="submit" 
-                  class="px-8 py-4 bg-white text-gray-900 rounded-full font-bold hover:bg-white/90 transition shadow-lg border-2 border-white/50"
-                  style="background-color: var(--home-light); color: var(--home-primary);"
-                >
-                  <i class="fas fa-search mr-2"></i>
-                  搜索
-                </button>
-              </div>
-            </form>
-          </div>
+      {/* Tag Navigation */}
+      <TagNavigation tags={conceptTags} />
+      {/* Tag Ring Hero Section */}
+      <div class="home-gradient text-white" style="position: relative; min-height: 70vh; display: flex; align-items: center; justify-content: center;">
+        <div id="ring-container" style="position: relative; width: 600px; height: 600px;">
+          <div id="center-dot" style="position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: white; border-radius: 50%; transform: translate(-50%, -50%); z-index: 1; opacity: 0.3;"></div>
+          <svg id="connections" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></svg>
+          {conceptTags.map((tag, index) => (
+            <a 
+              href={`/explore?tags=${tag.slug}&type=concept`}
+              class="tag-item"
+              data-index={index}
+              data-total={conceptTags.length}
+              style="position: absolute; color: white; font-size: 18px; font-weight: 500; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; user-select: none; cursor: pointer; transform-origin: center; z-index: 10;"
+            >
+              {tag.name}
+            </a>
+          ))}
         </div>
+        
+        {/* Custom cursor */}
+        <div id="cursor" style="position: fixed; width: 20px; height: 20px; border-radius: 50%; background: white; pointer-events: none; z-index: 9999; transition: transform 0.15s ease; transform: translate(-50%, -50%); mix-blend-mode: difference;"></div>
       </div>
       
-      {/* Tags Section */}
+      {/* Studios Gallery - Masonry Layout (Images Only) */}
       <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        {/* Concept Tags */}
-        <div class="mb-12 p-6 rounded-2xl concept-gradient border-2" style="border-color: var(--concept-primary);">
-          <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-white">
-            <i class="fas fa-lightbulb"></i>
-            按理念浏览
-          </h2>
-          <div class="flex flex-wrap gap-3">
-            {conceptTags.map(tag => (
-              <a 
-                href={`/explore?tags=${tag.slug}&type=concept`}
-                class="concept-tag px-6 py-3 rounded-full font-bold transition hover:scale-105 shadow-md hover:shadow-xl"
-              >
-                {tag.name}
-                <span class="ml-2 text-sm opacity-80">({tag.usage_count})</span>
-              </a>
-            ))}
-          </div>
+        <div class="masonry-grid">
+          {studios.map(studio => {
+            const aspectRatios = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[16/9]']
+            const randomAspect = aspectRatios[Math.floor(Math.random() * aspectRatios.length)]
+            
+            return (
+              <div class="masonry-item">
+                <a 
+                  href={`/studio/${studio.slug}`}
+                  class="group block rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                >
+                  <div class={`${randomAspect} bg-gray-200 overflow-hidden`}>
+                    {studio.cover_image_url ? (
+                      <img 
+                        src={studio.cover_image_url} 
+                        alt={studio.name}
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex items-center justify-center text-gray-400">
+                        <i class="fas fa-image text-6xl"></i>
+                      </div>
+                    )}
+                  </div>
+                </a>
+              </div>
+            )
+          })}
         </div>
         
-        {/* Material Tags */}
-        {materialTags.length > 0 && (
-          <div class="mb-12 p-6 rounded-2xl material-gradient border-2" style="border-color: var(--material-primary);">
-            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-white">
-              <i class="fas fa-cube"></i>
-              按材料浏览
-            </h2>
-            <div class="flex flex-wrap gap-3">
-              {materialTags.map(tag => (
-                <a 
-                  href={`/explore?tags=${tag.slug}&type=material`}
-                  class="material-tag px-6 py-3 rounded-full font-bold transition hover:scale-105 shadow-md hover:shadow-xl"
-                >
-                  {tag.name}
-                  <span class="ml-2 text-sm opacity-80">({tag.usage_count})</span>
-                </a>
-              ))}
-            </div>
+        {studios.length === 0 && (
+          <div class="text-center py-16 text-gray-500">
+            <i class="fas fa-inbox text-6xl mb-4 opacity-20"></i>
+            <p class="text-xl">暂无工作室，敬请期待</p>
           </div>
         )}
-        
-        {/* Quick Filters */}
-        <div class="mb-12">
-          <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
-            <i class="fas fa-filter text-blue-500"></i>
-            快速筛选
-          </h2>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <h3 class="font-semibold mb-3 text-gray-700">按品类</h3>
-              <div class="flex flex-wrap gap-2">
-                {categories.map(cat => (
-                  <a 
-                    href={`/explore?category=${cat}`}
-                    class="px-4 py-2 bg-white rounded-lg border-2 border-gray-200 hover:border-indigo-500 hover:text-indigo-600 transition font-medium"
-                  >
-                    {cat}
-                  </a>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 class="font-semibold mb-3 text-gray-700">按地区</h3>
-              <div class="flex flex-wrap gap-2">
-                {cities.map(city => (
-                  <a 
-                    href={`/explore?city=${city}`}
-                    class="px-4 py-2 bg-white rounded-lg border-2 border-gray-200 hover:border-indigo-500 hover:text-indigo-600 transition font-medium"
-                  >
-                    {city}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Studios Grid */}
-        <div class="mb-8">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold flex items-center gap-2">
-              <i class="fas fa-th-large text-pink-500"></i>
-              探索工作室
-            </h2>
-            <a 
-              href="/explore" 
-              class="text-indigo-600 hover:text-indigo-700 font-medium"
-            >
-              查看全部 <i class="fas fa-arrow-right ml-1"></i>
-            </a>
-          </div>
-          
-          <div class="masonry-grid">
-            {studios.map(studio => (
-              <StudioCard studio={studio} />
-            ))}
-          </div>
-          
-          {studios.length === 0 && (
-            <div class="text-center py-16 text-gray-500">
-              <i class="fas fa-inbox text-6xl mb-4 opacity-20"></i>
-              <p class="text-xl">暂无工作室，敬请期待</p>
-            </div>
-          )}
-        </div>
       </div>
+      
+      {/* Tag Ring Script */}
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          (function() {
+            const RADIUS = 250;
+            const CENTER_X = 300;
+            const CENTER_Y = 300;
+            const ROTATION_SPEED = 0.0003;
+            
+            let rotation = 0;
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let targetRotation = 0;
+            
+            const tagItems = document.querySelectorAll('.tag-item');
+            const cursor = document.getElementById('cursor');
+            const svg = document.getElementById('connections');
+            
+            function getRadius() {
+              return window.innerWidth < 768 ? 160 : RADIUS;
+            }
+            
+            function getCenterX() {
+              return window.innerWidth < 768 ? 200 : CENTER_X;
+            }
+            
+            function getCenterY() {
+              return window.innerWidth < 768 ? 200 : CENTER_Y;
+            }
+            
+            function positionTags() {
+              const radius = getRadius();
+              const centerX = getCenterX();
+              const centerY = getCenterY();
+              const totalTags = tagItems.length;
+              
+              tagItems.forEach((tag, index) => {
+                const angle = (index / totalTags) * Math.PI * 2 + rotation;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+                
+                tag.style.left = x + 'px';
+                tag.style.top = y + 'px';
+                tag.style.transform = 'translate(-50%, -50%)';
+              });
+              
+              drawConnections();
+            }
+            
+            function drawConnections() {
+              const radius = getRadius();
+              const centerX = getCenterX();
+              const centerY = getCenterY();
+              const totalTags = tagItems.length;
+              
+              let pathData = '';
+              
+              for (let i = 0; i < totalTags; i++) {
+                const angle1 = (i / totalTags) * Math.PI * 2 + rotation;
+                const angle2 = ((i + 1) / totalTags) * Math.PI * 2 + rotation;
+                
+                const x1 = centerX + Math.cos(angle1) * radius;
+                const y1 = centerY + Math.sin(angle1) * radius;
+                const x2 = centerX + Math.cos(angle2) * radius;
+                const y2 = centerY + Math.sin(angle2) * radius;
+                
+                if (i === 0) {
+                  pathData += 'M ' + x1 + ' ' + y1 + ' ';
+                }
+                pathData += 'L ' + x2 + ' ' + y2 + ' ';
+              }
+              
+              pathData += 'Z';
+              svg.innerHTML = '<path style="stroke: rgba(255, 255, 255, 0.15); stroke-width: 1; fill: none;" d="' + pathData + '" />';
+            }
+            
+            document.addEventListener('mousemove', (e) => {
+              mouseX = e.clientX;
+              mouseY = e.clientY;
+              
+              cursor.style.left = mouseX + 'px';
+              cursor.style.top = mouseY + 'px';
+              
+              const containerRect = document.getElementById('ring-container').getBoundingClientRect();
+              const containerCenterX = containerRect.left + containerRect.width / 2;
+              const containerCenterY = containerRect.top + containerRect.height / 2;
+              
+              const deltaX = mouseX - containerCenterX;
+              const deltaY = mouseY - containerCenterY;
+              
+              targetRotation = Math.atan2(deltaY, deltaX) * 0.1;
+            });
+            
+            tagItems.forEach(tag => {
+              tag.addEventListener('mouseenter', () => {
+                tag.style.fontSize = '28px';
+                tag.style.fontWeight = '700';
+                tag.style.zIndex = '20';
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+              });
+              
+              tag.addEventListener('mouseleave', () => {
+                tag.style.fontSize = '18px';
+                tag.style.fontWeight = '500';
+                tag.style.zIndex = '10';
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+              });
+            });
+            
+            function animate() {
+              rotation += (targetRotation - rotation) * 0.05;
+              rotation += ROTATION_SPEED;
+              positionTags();
+              requestAnimationFrame(animate);
+            }
+            
+            window.addEventListener('resize', positionTags);
+            positionTags();
+            animate();
+          })();
+        `
+      }}/>
     </Layout>
-  )
-}
-
-function StudioCard({ studio }: { studio: Studio }) {
-  // Random aspect ratio for masonry effect
-  const aspectRatios = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[16/9]']
-  const randomAspect = aspectRatios[Math.floor(Math.random() * aspectRatios.length)]
-  
-  return (
-    <div class="masonry-item">
-      <a 
-        href={`/studio/${studio.slug}`}
-        class="group block home-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
-      >
-        {/* Cover Image */}
-        <div class={`${randomAspect} bg-gray-200 overflow-hidden`}>
-          {studio.cover_image_url ? (
-            <img 
-              src={studio.cover_image_url} 
-              alt={studio.name}
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            />
-          ) : (
-            <div class="w-full h-full flex items-center justify-center text-gray-400">
-              <i class="fas fa-image text-6xl"></i>
-            </div>
-          )}
-        </div>
-        
-        {/* Content */}
-        <div class="p-5">
-          <h3 class="font-bold text-xl mb-2 group-hover:text-blue-600 transition line-clamp-1" style="color: var(--home-primary);">
-            {studio.name}
-          </h3>
-          {studio.tagline && (
-            <p class="text-gray-700 text-sm mb-3 line-clamp-2 leading-relaxed">
-              {studio.tagline}
-            </p>
-          )}
-          
-          {/* Meta info */}
-          <div class="flex items-center gap-2 text-xs mb-3 flex-wrap">
-            {studio.category && (
-              <span class="px-3 py-1 rounded-full font-medium border-2" style="background-color: var(--home-light); color: var(--home-primary); border-color: var(--home-accent);">
-                {studio.category}
-              </span>
-            )}
-            {studio.city && (
-              <span class="flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-full border-2 border-gray-200" style="color: var(--home-secondary);">
-                <i class="fas fa-map-marker-alt"></i>
-                {studio.city}
-              </span>
-            )}
-          </div>
-          
-          {/* Stats */}
-          <div class="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-gray-200">
-            <span class="flex items-center gap-1">
-              <i class="fas fa-eye"></i>
-              {studio.view_count}
-            </span>
-            <span class="flex items-center gap-1">
-              <i class="fas fa-heart"></i>
-              {studio.favorite_count}
-            </span>
-          </div>
-        </div>
-      </a>
-    </div>
   )
 }

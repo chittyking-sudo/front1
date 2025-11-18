@@ -15,7 +15,7 @@ export function StudioDetailPage({
       <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Back button */}
         <a 
-          href="/home" 
+          href="/" 
           class="inline-flex items-center gap-2 text-gray-600 hover:text-indigo-600 mb-6 transition"
         >
           <i class="fas fa-arrow-left"></i>
