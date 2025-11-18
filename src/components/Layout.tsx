@@ -1,6 +1,12 @@
 import { LanguageSwitcher } from './LanguageSwitcher'
 
 export function Layout({ children, lang = 'zh' }: { children: any, lang?: string }) {
+  const fontStyle = `
+    body, * {
+      font-family: 'SimSun', '宋体', serif !important;
+    }
+  `
+  
   const t = (key: string) => {
     const translations: Record<string, any> = {
       zh: {
@@ -23,6 +29,8 @@ export function Layout({ children, lang = 'zh' }: { children: any, lang?: string
 
   return (
     <div class="min-h-screen flex flex-col">
+      <style dangerouslySetInnerHTML={{ __html: fontStyle }} />
+      
       {/* Navigation */}
       <nav class="home-gradient shadow-lg sticky top-0 z-50 border-b-2 border-white/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

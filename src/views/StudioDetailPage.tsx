@@ -12,6 +12,14 @@ export function StudioDetailPage({
   
   return (
     <Layout>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          body, * {
+            font-family: 'SimSun', '宋体', serif !important;
+          }
+        `
+      }}/>
+      
       <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Back button */}
         <a 
@@ -55,6 +63,17 @@ export function StudioDetailPage({
           </div>
         </div>
         
+        {/* Cover Image */}
+        {studio.cover_image_url && (
+          <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
+            <img 
+              src={studio.cover_image_url} 
+              alt={studio.name}
+              class="w-full aspect-[16/9] object-cover"
+            />
+          </div>
+        )}
+        
         {/* Tags */}
         {studio.tags && studio.tags.length > 0 && (
           <div class="mb-8">
@@ -69,6 +88,16 @@ export function StudioDetailPage({
                   #{tag.name}
                 </a>
               ))}
+            </div>
+          </div>
+        )}
+        
+        {/* Description */}
+        {studio.description && (
+          <div class="mb-12">
+            <h3 class="text-2xl font-bold mb-6">关于这个工作室</h3>
+            <div class="prose prose-lg max-w-none">
+              <div dangerouslySetInnerHTML={{ __html: formatMarkdown(studio.description) }} />
             </div>
           </div>
         )}
@@ -96,16 +125,6 @@ export function StudioDetailPage({
                   )}
                 </div>
               ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Description */}
-        {studio.description && (
-          <div class="mb-12">
-            <h3 class="text-2xl font-bold mb-6">关于这个工作室</h3>
-            <div class="prose prose-lg max-w-none">
-              <div dangerouslySetInnerHTML={{ __html: formatMarkdown(studio.description) }} />
             </div>
           </div>
         )}

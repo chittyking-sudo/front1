@@ -10,6 +10,14 @@ export function AdminDashboard({
 }) {
   return (
     <Layout>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          body, * {
+            font-family: 'SimSun', '宋体', serif !important;
+          }
+        `
+      }}/>
+      
       <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between mb-8">
           <h1 class="text-3xl font-bold">管理后台</h1>
