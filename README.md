@@ -225,7 +225,17 @@ npm run db:migrate:prod
 
 ## 🚀 部署指南
 
-### 方式 1: 自动部署脚本（推荐）
+> 📖 **完整部署文档**: [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+### 快速部署选项
+
+#### 🌍 方案一：Cloudflare Pages（推荐 - 国际用户）
+
+**优势：**
+- ✅ 全球 CDN 加速
+- ✅ 免费 HTTPS + 无限带宽
+- ✅ 零配置自动部署
+- ✅ 无需服务器维护
 
 **前提条件：**
 1. 在 Deploy 标签页设置 Cloudflare API Key
@@ -237,14 +247,37 @@ cd /home/user/webapp
 ./deploy.sh
 ```
 
-脚本会自动完成：
-- ✅ 创建 D1 数据库
-- ✅ 应用数据库迁移
-- ✅ 构建项目
-- ✅ 创建 Pages 项目
-- ✅ 部署到生产环境
+#### 🇨🇳 方案二：境内服务器部署（推荐 - 境内用户）
 
-### 方式 2: 手动部署
+**优势：**
+- ✅ 境内访问速度快
+- ✅ 数据存储在境内
+- ✅ 完全自主可控
+- ✅ 支持定制化需求
+
+**Docker 一键部署：**
+```bash
+# 1. 准备境内服务器（阿里云/腾讯云/华为云）
+# 2. 安装 Docker 和 Docker Compose
+# 3. 克隆项目并运行部署脚本
+
+git clone https://github.com/your-repo/studio-network.git
+cd studio-network
+./deploy-cn.sh
+```
+
+**部署完成后访问：**
+- HTTP: http://your-server-ip
+- 应用端口: http://your-server-ip:3000
+
+**配置域名（可选）：**
+```bash
+# 编辑 nginx.conf，替换 server_name
+# 配置 SSL 证书（推荐使用 Let's Encrypt）
+# 重启 Nginx：docker-compose restart nginx
+```
+
+### 方式 3: 手动部署
 
 **详细步骤请查看：**
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - 快速部署说明
