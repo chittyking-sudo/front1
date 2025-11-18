@@ -1,5 +1,6 @@
 import type { Studio, Tag } from '../types'
 import { Layout } from '../components/Layout'
+import { TagNavigation } from '../components/TagNavigation'
 
 export function SearchPage({ 
   studios,
@@ -28,6 +29,9 @@ export function SearchPage({
   
   return (
     <Layout>
+      {/* Tag Navigation */}
+      <TagNavigation tags={allTags.filter(t => t.category === 'concept')} />
+      
       <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Filters Section */}
         <div class={`${cardClass} rounded-2xl shadow-lg p-6 mb-8`}>
@@ -128,7 +132,7 @@ export function SearchPage({
           </h2>
         </div>
         
-        {/* Studios Grid - Masonry Layout */}
+        {/* Studios Grid - Masonry Layout (Images Only) */}
         <div class="masonry-grid">
           {studios.map(studio => {
             const aspectRatios = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[16/9]']
@@ -138,57 +142,25 @@ export function SearchPage({
               <div class="masonry-item">
                 <a 
                   href={`/studio/${studio.slug}`}
-                  class={`group block ${cardClass} rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}
+                  class="group block rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 >
-                <div class={`${randomAspect} bg-gray-200 overflow-hidden`}>
-                  {studio.cover_image_url ? (
-                    <img 
-                      src={studio.cover_image_url} 
-                      alt={studio.name}
-                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div class="w-full h-full flex items-center justify-center text-gray-400">
-                      <i class="fas fa-image text-6xl"></i>
-                    </div>
-                  )}
-                </div>
-                
-                <div class="p-5">
-                  <h3 class="font-bold text-xl mb-2 group-hover:opacity-80 transition line-clamp-1" style={`color: ${isConcept ? 'var(--concept-secondary)' : isMaterial ? 'var(--material-secondary)' : 'var(--home-primary)'};`}>
-                    {studio.name}
-                  </h3>
-                  {studio.tagline && (
-                    <p class="text-gray-700 text-sm mb-3 line-clamp-2 leading-relaxed">
-                      {studio.tagline}
-                    </p>
-                  )}
-                  
-                  <div class="flex items-center gap-2 text-xs mb-3 flex-wrap">
-                    {studio.category && (
-                      <span class="px-3 py-1 rounded-full font-medium border-2" style={`background-color: ${isConcept ? 'var(--concept-light-2)' : isMaterial ? 'var(--material-primary)' : 'var(--home-light)'}; border-color: ${isConcept ? 'var(--concept-light-2)' : isMaterial ? 'var(--material-primary)' : 'var(--home-light)'};`}>
-                        {studio.category}
-                      </span>
-                    )}
-                    {studio.city && (
-                      <span class="flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-full border-2 border-gray-200 text-gray-600">
-                        <i class="fas fa-map-marker-alt"></i>
-                        {studio.city}
-                      </span>
+                  <div class={`${randomAspect} bg-gray-200 overflow-hidden`}>
+                    {studio.cover_image_url ? (
+                      <img 
+                        src={studio.cover_image_url} 
+                        alt={studio.name}
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex items-center justify-center text-gray-400">
+                        <i class="fas fa-image text-6xl"></i>
+                      </div>
                     )}
                   </div>
-                  
-                  <div class="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-gray-200">
-                    <span class="flex items-center gap-1">
-                      <i class="fas fa-eye"></i>
-                      {studio.view_count}
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          )
-        })}
+                </a>
+              </div>
+            )
+          })}
         </div>
         
         {studios.length === 0 && (
