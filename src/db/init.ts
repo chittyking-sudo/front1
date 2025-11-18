@@ -131,4 +131,180 @@ async function insertSeedData(db: D1Database): Promise<void> {
   }
   
   console.log(`✅ Inserted ${tags.length} preset tags`)
+  
+  // Insert sample studios
+  const studios = [
+    {
+      name: '极简陶艺工作室',
+      slug: 'minimalist-pottery',
+      tagline: '用最简单的线条,表达最纯粹的美',
+      description: '# 我们的理念\n\n专注于极简主义陶艺创作,追求形式与功能的完美平衡。\n\n## 创作风格\n\n- 简洁的线条\n- 纯净的色彩\n- 实用的设计',
+      category: '陶艺',
+      city: '景德镇',
+      stage: '成熟运营',
+      cover: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800',
+      tags: ['minimalism']
+    },
+    {
+      name: '侘寂美学木工坊',
+      slug: 'wabi-sabi-woodwork',
+      tagline: '接受不完美,发现时光之美',
+      description: '# 关于我们\n\n侘寂美学不是缺陷,而是自然的痕迹。每一件作品都承载着时光的故事。',
+      category: '木工',
+      city: '京都',
+      stage: '成熟运营',
+      cover: 'https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=800',
+      tags: ['wabi-sabi']
+    },
+    {
+      name: '未来感服装设计',
+      slug: 'future-fashion',
+      tagline: '科技与时尚的前瞻融合',
+      description: '# 设计哲学\n\n探索未来时尚的可能性,将科技面料与前卫设计相结合。',
+      category: '服装',
+      city: '上海',
+      stage: '初创阶段',
+      cover: 'https://images.unsplash.com/photo-1558769132-cb1aea94f4fa?w=800',
+      tags: ['futurism']
+    },
+    {
+      name: '复古插画工作室',
+      slug: 'vintage-illustration',
+      tagline: '时光印记,经典重现',
+      description: '# 我们的作品\n\n用插画记录那个黄金时代的美好。',
+      category: '插画',
+      city: '台北',
+      stage: '成熟运营',
+      cover: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800',
+      tags: ['vintage']
+    },
+    {
+      name: '手工皮具工坊',
+      slug: 'handmade-leather',
+      tagline: '手作痕迹,匠人精神',
+      description: '# 匠人之心\n\n每一针每一线都是对传统工艺的致敬。',
+      category: '皮具',
+      city: '佛罗伦萨',
+      stage: '成熟运营',
+      cover: 'https://images.unsplash.com/photo-1517646287270-fe29a1220c00?w=800',
+      tags: ['handmade']
+    },
+    {
+      name: '东方意境茶室',
+      slug: 'oriental-tea-house',
+      tagline: '中式意境,禅意空间',
+      description: '# 茶道美学\n\n在茶香中体验东方哲学。',
+      category: '空间设计',
+      city: '杭州',
+      stage: '成熟运营',
+      cover: 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=800',
+      tags: ['oriental']
+    },
+    {
+      name: '自然主义家居',
+      slug: 'natural-home',
+      tagline: '天然材料,返璞归真',
+      description: '# 回归自然\n\n用最天然的材料,创造最舒适的生活空间。',
+      category: '家居',
+      city: '波特兰',
+      stage: '成长期',
+      cover: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800',
+      tags: ['naturalism']
+    },
+    {
+      name: '工业风金属工作室',
+      slug: 'industrial-metal',
+      tagline: '粗犷质感,机械美学',
+      description: '# 工业之美\n\n金属与机械的完美结合。',
+      category: '金属工艺',
+      city: '柏林',
+      stage: '成熟运营',
+      cover: 'https://images.unsplash.com/photo-1565191999001-551c187427bb?w=800',
+      tags: ['industrial']
+    },
+    {
+      name: '北欧简约家居',
+      slug: 'nordic-home',
+      tagline: '简约而不简单的生活美学',
+      description: '# 北欧生活\n\n简洁、实用、温暖是我们的设计准则。',
+      category: '家居',
+      city: '哥本哈根',
+      stage: '成熟运营',
+      cover: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800',
+      tags: ['minimalism', 'naturalism']
+    },
+    {
+      name: '现代陶瓷艺术',
+      slug: 'modern-pottery',
+      tagline: '传统工艺的当代表达',
+      description: '# 当代陶艺\n\n在传统与现代之间找到平衡。',
+      category: '陶艺',
+      city: '苏州',
+      stage: '成长期',
+      cover: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800',
+      tags: ['minimalism', 'oriental']
+    },
+    {
+      name: '手作布艺工坊',
+      slug: 'handmade-fabric',
+      tagline: '针线之间的温暖故事',
+      description: '# 布艺之美\n\n每一针都是情感的传递。',
+      category: '布艺',
+      city: '厦门',
+      stage: '初创阶段',
+      cover: 'https://images.unsplash.com/photo-1487376480913-24046456a727?w=800',
+      tags: ['handmade', 'naturalism']
+    },
+    {
+      name: '复古金工饰品',
+      slug: 'vintage-jewelry',
+      tagline: '时光雕刻的精致美学',
+      description: '# 金工艺术\n\n复古不是怀旧，而是经典的延续。',
+      category: '首饰',
+      city: '巴黎',
+      stage: '成熟运营',
+      cover: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800',
+      tags: ['vintage', 'handmade']
+    }
+  ]
+  
+  for (const studio of studios) {
+    // Insert studio
+    const result = await db.prepare(
+      `INSERT OR IGNORE INTO studios (name, slug, tagline, description, category, city, stage, cover_image_url, status) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'published')`
+    ).bind(
+      studio.name,
+      studio.slug,
+      studio.tagline,
+      studio.description,
+      studio.category,
+      studio.city,
+      studio.stage,
+      studio.cover
+    ).run()
+    
+    // Link tags
+    if (result.success) {
+      const studioRecord = await db.prepare(
+        `SELECT id FROM studios WHERE slug = ?`
+      ).bind(studio.slug).first()
+      
+      if (studioRecord) {
+        for (const tagSlug of studio.tags) {
+          const tagRecord = await db.prepare(
+            `SELECT id FROM tags WHERE slug = ?`
+          ).bind(tagSlug).first()
+          
+          if (tagRecord) {
+            await db.prepare(
+              `INSERT OR IGNORE INTO studio_tags (studio_id, tag_id) VALUES (?, ?)`
+            ).bind(studioRecord.id, tagRecord.id).run()
+          }
+        }
+      }
+    }
+  }
+  
+  console.log(`✅ Inserted ${studios.length} sample studios`)
 }
