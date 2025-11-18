@@ -201,33 +201,73 @@ npm run db:reset
 npm run db:migrate:prod
 ```
 
-## 部署指南
+## 🚀 部署指南
 
-### Cloudflare Pages 部署
+### 方式 1: 自动部署脚本（推荐）
 
-1. **准备工作**
-   - 注册 Cloudflare 账号
-   - 获取 Cloudflare API Token
+**前提条件：**
+1. 在 Deploy 标签页设置 Cloudflare API Key
+2. 运行 `setup_cloudflare_api_key` 配置环境
 
-2. **创建 D1 数据库**
+**一键部署：**
 ```bash
-npx wrangler d1 create webapp-production
-# 复制返回的 database_id 到 wrangler.jsonc
+cd /home/user/webapp
+./deploy.sh
 ```
 
-3. **应用数据库迁移**
+脚本会自动完成：
+- ✅ 创建 D1 数据库
+- ✅ 应用数据库迁移
+- ✅ 构建项目
+- ✅ 创建 Pages 项目
+- ✅ 部署到生产环境
+
+### 方式 2: 手动部署
+
+**详细步骤请查看：**
+- [DEPLOYMENT.md](./DEPLOYMENT.md) - 快速部署说明
+- [deploy-guide.md](./deploy-guide.md) - 完整部署指南
+
+**快速命令：**
 ```bash
-npx wrangler d1 migrations apply webapp-production
+# 1. 设置认证
+setup_cloudflare_api_key
+
+# 2. 创建数据库
+npx wrangler d1 create studio-network-production
+
+# 3. 更新 wrangler.jsonc 中的 database_id
+
+# 4. 应用迁移
+npx wrangler d1 migrations apply studio-network-production
+
+# 5. 构建项目
+npm run build
+
+# 6. 创建 Pages 项目
+npx wrangler pages project create studio-network \
+  --production-branch main \
+  --compatibility-date 2025-11-15
+
+# 7. 部署
+npx wrangler pages deploy dist --project-name studio-network
+
+# 8. 在 Cloudflare Dashboard 中绑定 D1 数据库
 ```
 
-4. **构建并部署**
+### 部署后配置
+
+**绑定 D1 数据库：**
+1. 访问 [Cloudflare Dashboard](https://dash.cloudflare.com)
+2. 进入 Pages 项目 `studio-network`
+3. Settings > Functions > D1 database bindings
+4. 添加绑定：Variable name: `DB`, D1 database: `studio-network-production`
+
+**更新部署：**
 ```bash
 npm run build
-npm run deploy:prod
+npx wrangler pages deploy dist --project-name studio-network
 ```
-
-5. **配置域名（可选）**
-   - 在 Cloudflare Pages Dashboard 中绑定自定义域名
 
 ## 访问地址
 
