@@ -83,10 +83,22 @@ export async function getStudioBySlug(
     `SELECT * FROM images WHERE studio_id = ? ORDER BY sort_order`
   ).bind(studio.id).all()
   
+  // Get product concepts
+  const { results: productConcepts } = await db.prepare(
+    `SELECT * FROM product_concepts WHERE studio_id = ? ORDER BY sort_order`
+  ).bind(studio.id).all()
+  
+  // Get timeline events
+  const { results: timelineEvents } = await db.prepare(
+    `SELECT * FROM timeline_events WHERE studio_id = ? ORDER BY date DESC`
+  ).bind(studio.id).all()
+  
   return {
     ...studio,
     tags: tags as Tag[],
-    images: images as Image[]
+    images: images as Image[],
+    productConcepts: productConcepts as any[],
+    timelineEvents: timelineEvents as any[]
   }
 }
 

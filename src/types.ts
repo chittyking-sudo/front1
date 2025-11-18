@@ -59,12 +59,38 @@ export type Image = {
   sort_order: number
   like_count: number
   status: string
+  image_type: string | null  // 'product_concept' | 'timeline' | 'gallery'
+}
+
+export type ProductConcept = {
+  id: string
+  studio_id: string
+  title: string
+  description: string | null
+  image_url: string
+  status: string  // '概念设计' | '原型制作' | '测试阶段' | '已发布'
+  sort_order: number
+  created_at: string
+}
+
+export type TimelineEvent = {
+  id: string
+  studio_id: string
+  date: string  // YYYY-MM format
+  title: string
+  description: string | null
+  image_url: string | null
+  milestone: boolean
+  sort_order: number
+  created_at: string
 }
 
 // Extended types for API responses
 export type StudioWithTags = Studio & {
   tags: Tag[]
   images?: Image[]
+  productConcepts?: ProductConcept[]
+  timelineEvents?: TimelineEvent[]
 }
 
 export type TagWithCount = Tag & {

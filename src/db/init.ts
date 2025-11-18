@@ -86,6 +86,34 @@ async function createTables(db: D1Database): Promise<void> {
       sort_order INTEGER DEFAULT 0,
       like_count INTEGER DEFAULT 0,
       status TEXT DEFAULT 'approved',
+      image_type TEXT DEFAULT 'gallery',
+      FOREIGN KEY (studio_id) REFERENCES studios(id) ON DELETE CASCADE
+    )`,
+    
+    // Product concepts table
+    `CREATE TABLE IF NOT EXISTS product_concepts (
+      id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      studio_id TEXT NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT,
+      image_url TEXT NOT NULL,
+      status TEXT DEFAULT '概念设计',
+      sort_order INTEGER DEFAULT 0,
+      FOREIGN KEY (studio_id) REFERENCES studios(id) ON DELETE CASCADE
+    )`,
+    
+    // Timeline events table
+    `CREATE TABLE IF NOT EXISTS timeline_events (
+      id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      studio_id TEXT NOT NULL,
+      date TEXT NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT,
+      image_url TEXT,
+      milestone INTEGER DEFAULT 0,
+      sort_order INTEGER DEFAULT 0,
       FOREIGN KEY (studio_id) REFERENCES studios(id) ON DELETE CASCADE
     )`,
     
@@ -96,7 +124,9 @@ async function createTables(db: D1Database): Promise<void> {
     `CREATE INDEX IF NOT EXISTS idx_studios_status ON studios(status)`,
     `CREATE INDEX IF NOT EXISTS idx_studio_tags_studio ON studio_tags(studio_id)`,
     `CREATE INDEX IF NOT EXISTS idx_studio_tags_tag ON studio_tags(tag_id)`,
-    `CREATE INDEX IF NOT EXISTS idx_images_studio ON images(studio_id, sort_order)`
+    `CREATE INDEX IF NOT EXISTS idx_images_studio ON images(studio_id, sort_order)`,
+    `CREATE INDEX IF NOT EXISTS idx_product_concepts_studio ON product_concepts(studio_id, sort_order)`,
+    `CREATE INDEX IF NOT EXISTS idx_timeline_events_studio ON timeline_events(studio_id, date)`
   ]
   
   for (const sql of statements) {
@@ -307,4 +337,95 @@ async function insertSeedData(db: D1Database): Promise<void> {
   }
   
   console.log(`✅ Inserted ${studios.length} sample studios`)
+  
+  // Add sample product concepts for first studio
+  const minimalStudio = await db.prepare(
+    `SELECT id FROM studios WHERE slug = 'minimalist-pottery' LIMIT 1`
+  ).first()
+  
+  if (minimalStudio) {
+    const concepts = [
+      {
+        title: '极简茶具系列',
+        desc: '探索茶道文化与现代设计的结合，用最简单的线条表达最纯粹的美学理念。',
+        image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600',
+        status: '概念设计'
+      },
+      {
+        title: '手工拉坯花器',
+        desc: '每一件都是独一无二的艺术品，承载着匠人的温度和时间的印记。',
+        image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600',
+        status: '原型制作'
+      },
+      {
+        title: '侘寂美学餐具',
+        desc: '接受不完美，发现残缺之美。每一道裂痕都是时光的馈赠。',
+        image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600',
+        status: '测试阶段'
+      }
+    ]
+    
+    for (let i = 0; i < concepts.length; i++) {
+      await db.prepare(
+        `INSERT OR IGNORE INTO product_concepts (studio_id, title, description, image_url, status, sort_order) 
+         VALUES (?, ?, ?, ?, ?, ?)`
+      ).bind(minimalStudio.id, concepts[i].title, concepts[i].desc, concepts[i].image, concepts[i].status, i).run()
+    }
+    
+    // Add sample timeline for first studio
+    const timeline = [
+      {
+        date: '2024-01',
+        title: '工作室成立',
+        desc: '在景德镇古镇创立工作室，开始极简陶艺创作之路。',
+        image: 'https://images.unsplash.com/photo-1493106819501-66d381c466f1?w=400',
+        milestone: true
+      },
+      {
+        date: '2024-03',
+        title: '首个系列发布',
+        desc: '「纯粹」系列茶具正式发布，获得设计界关注。',
+        image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=400',
+        milestone: false
+      },
+      {
+        date: '2024-06',
+        title: '入驻高端买手店',
+        desc: '作品进入上海、北京多家高端买手店销售。',
+        image: null,
+        milestone: true
+      },
+      {
+        date: '2024-09',
+        title: '参展米兰设计周',
+        desc: '受邀参加米兰设计周，作品获得国际认可。',
+        image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400',
+        milestone: true
+      },
+      {
+        date: '2024-11',
+        title: '开设线下体验空间',
+        desc: '在杭州西湖边开设首家线下体验空间和工作坊。',
+        image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400',
+        milestone: false
+      }
+    ]
+    
+    for (let i = 0; i < timeline.length; i++) {
+      await db.prepare(
+        `INSERT OR IGNORE INTO timeline_events (studio_id, date, title, description, image_url, milestone, sort_order) 
+         VALUES (?, ?, ?, ?, ?, ?, ?)`
+      ).bind(
+        minimalStudio.id, 
+        timeline[i].date, 
+        timeline[i].title, 
+        timeline[i].desc, 
+        timeline[i].image, 
+        timeline[i].milestone ? 1 : 0, 
+        i
+      ).run()
+    }
+    
+    console.log(`✅ Added product concepts and timeline for sample studio`)
+  }
 }

@@ -9,67 +9,8 @@ export function StudioDetailPage({
   similarStudios: Studio[]
 }) {
   const links = studio.links ? JSON.parse(studio.links) : []
-  
-  // Sample product concepts (would come from database)
-  const productConcepts = [
-    {
-      title: '极简茶具系列',
-      description: '探索茶道文化与现代设计的结合，用最简单的线条表达最纯粹的美学理念。',
-      image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600',
-      status: '概念设计'
-    },
-    {
-      title: '手工拉坯花器',
-      description: '每一件都是独一无二的艺术品，承载着匠人的温度和时间的印记。',
-      image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600',
-      status: '原型制作'
-    },
-    {
-      title: '侘寂美学餐具',
-      description: '接受不完美，发现残缺之美。每一道裂痕都是时光的馈赠。',
-      image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600',
-      status: '测试阶段'
-    }
-  ]
-  
-  // Sample timeline (would come from database)
-  const timeline = [
-    {
-      date: '2024-01',
-      title: '工作室成立',
-      description: '在景德镇古镇创立工作室，开始极简陶艺创作之路。',
-      image: 'https://images.unsplash.com/photo-1493106819501-66d381c466f1?w=400',
-      milestone: true
-    },
-    {
-      date: '2024-03',
-      title: '首个系列发布',
-      description: '「纯粹」系列茶具正式发布，获得设计界关注。',
-      image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=400',
-      milestone: false
-    },
-    {
-      date: '2024-06',
-      title: '入驻高端买手店',
-      description: '作品进入上海、北京多家高端买手店销售。',
-      image: null,
-      milestone: true
-    },
-    {
-      date: '2024-09',
-      title: '参展米兰设计周',
-      description: '受邀参加米兰设计周，作品获得国际认可。',
-      image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400',
-      milestone: true
-    },
-    {
-      date: '2024-11',
-      title: '开设线下体验空间',
-      description: '在杭州西湖边开设首家线下体验空间和工作坊。',
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400',
-      milestone: false
-    }
-  ]
+  const productConcepts = studio.productConcepts || []
+  const timelineEvents = studio.timelineEvents || []
   
   return (
     <Layout>
@@ -78,17 +19,64 @@ export function StudioDetailPage({
           body, * {
             font-family: 'SimSun', '宋体', serif !important;
           }
+          
+          .masonry-grid-detail {
+            column-count: 3;
+            column-gap: 1rem;
+          }
+          
+          @media (max-width: 1024px) {
+            .masonry-grid-detail {
+              column-count: 2;
+            }
+          }
+          
+          @media (max-width: 640px) {
+            .masonry-grid-detail {
+              column-count: 1;
+            }
+          }
+          
+          .masonry-item-detail {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+          }
+          
+          .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #e5e7eb, #d1d5db);
+          }
+          
+          .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          }
+          
+          .timeline-milestone {
+            width: 24px;
+            height: 24px;
+          }
         `
       }}/>
       
       <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Back button */}
         <a 
-          href="/" 
+          href="/explore" 
           class="inline-flex items-center gap-2 text-gray-600 hover:text-indigo-600 mb-6 transition"
         >
           <i class="fas fa-arrow-left"></i>
-          返回首页
+          返回探索
         </a>
         
         {/* Studio Header */}
@@ -153,45 +141,6 @@ export function StudioDetailPage({
           </div>
         )}
         
-        {/* Voting Section */}
-        <div class="mb-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border-2 border-indigo-200">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center gap-3 mb-3">
-                <i class="fas fa-vote-yea text-3xl text-indigo-600"></i>
-                <div>
-                  <h3 class="text-xl font-bold text-gray-800">社区治理投票</h3>
-                  <p class="text-sm text-gray-600">参与工作室重要决策，让你的声音被听见</p>
-                </div>
-              </div>
-              <p class="text-gray-700 mb-4">
-                我们相信去中心化的社区治理。通过 Snapshot 平台，所有支持者都可以参与工作室的重要决策，包括新产品开发方向、设计理念选择、展览计划等。
-              </p>
-              <div class="flex gap-3">
-                <a 
-                  href="https://snapshot.org/" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition shadow-lg hover:shadow-xl"
-                >
-                  <i class="fas fa-external-link-alt"></i>
-                  前往投票平台
-                </a>
-                <button class="px-6 py-3 bg-white text-indigo-600 rounded-lg font-medium hover:bg-indigo-50 transition border-2 border-indigo-200">
-                  <i class="fas fa-info-circle mr-2"></i>
-                  了解投票规则
-                </button>
-              </div>
-            </div>
-            <div class="ml-6 text-center">
-              <div class="bg-white rounded-xl p-4 shadow-md">
-                <div class="text-3xl font-bold text-indigo-600 mb-1">3</div>
-                <div class="text-sm text-gray-600">进行中的提案</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
         {/* Description */}
         {studio.description && (
           <div class="mb-12">
@@ -202,121 +151,159 @@ export function StudioDetailPage({
           </div>
         )}
         
-        {/* Product Concepts */}
-        <div class="mb-12">
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-2xl font-bold">产品原型概念</h3>
-            <span class="text-sm text-gray-500">
-              <i class="fas fa-lightbulb mr-1"></i>
-              展示创作过程和设计理念
-            </span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {productConcepts.map((concept, idx) => (
-              <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-indigo-200">
-                <div class="aspect-square bg-gray-200 overflow-hidden relative">
-                  <img 
-                    src={concept.image}
-                    alt={concept.title}
-                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                  />
-                  <div class="absolute top-3 right-3">
-                    <span class="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-indigo-600 border border-indigo-200">
-                      {concept.status}
-                    </span>
-                  </div>
-                </div>
-                <div class="p-5">
-                  <h4 class="font-bold text-lg mb-2 text-gray-800">{concept.title}</h4>
-                  <p class="text-sm text-gray-600 leading-relaxed">{concept.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Production Timeline */}
-        <div class="mb-12">
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-2xl font-bold">制作时间轴</h3>
-            <span class="text-sm text-gray-500">
-              <i class="fas fa-history mr-1"></i>
-              记录工作室成长历程
-            </span>
-          </div>
-          <div class="relative">
-            {/* Timeline line */}
-            <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500"></div>
-            
-            {/* Timeline items */}
-            <div class="space-y-8">
-              {timeline.map((item, idx) => (
-                <div class="relative pl-20">
-                  {/* Timeline dot */}
-                  <div class={`absolute left-6 w-5 h-5 rounded-full border-4 ${
-                    item.milestone 
-                      ? 'bg-indigo-500 border-indigo-200 shadow-lg shadow-indigo-500/50' 
-                      : 'bg-white border-gray-300'
-                  }`}></div>
-                  
-                  {/* Timeline content */}
-                  <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-gray-100 hover:border-indigo-200">
-                    <div class="flex items-start gap-4">
-                      {item.image && (
-                        <div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
-                          <img 
-                            src={item.image}
-                            alt={item.title}
-                            class="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                      <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                          <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-medium">
-                            {item.date}
+        {/* Product Concepts Section */}
+        {productConcepts.length > 0 && (
+          <div class="mb-12">
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+              <i class="fas fa-lightbulb text-yellow-500"></i>
+              产品原型概念
+            </h3>
+            <div class="masonry-grid-detail">
+              {productConcepts.map((concept: any) => {
+                const aspectRatios = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]']
+                const randomAspect = aspectRatios[Math.floor(Math.random() * aspectRatios.length)]
+                
+                return (
+                  <div class="masonry-item-detail">
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
+                      <div class={`${randomAspect} bg-gray-200 overflow-hidden relative`}>
+                        <img 
+                          src={concept.image_url} 
+                          alt={concept.title}
+                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div class="absolute top-3 right-3">
+                          <span class="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-gray-700 shadow-sm">
+                            {concept.status}
                           </span>
-                          {item.milestone && (
-                            <span class="px-2 py-1 bg-yellow-50 text-yellow-600 rounded text-xs font-medium">
-                              <i class="fas fa-star mr-1"></i>
-                              里程碑
-                            </span>
-                          )}
                         </div>
-                        <h4 class="font-bold text-lg mb-2 text-gray-800">{item.title}</h4>
-                        <p class="text-gray-600 leading-relaxed">{item.description}</p>
+                      </div>
+                      <div class="p-4">
+                        <h4 class="font-bold text-lg mb-2">{concept.title}</h4>
+                        {concept.description && (
+                          <p class="text-sm text-gray-600">{concept.description}</p>
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
+          </div>
+        )}
+        
+        {/* Timeline Section */}
+        {timelineEvents.length > 0 && (
+          <div class="mb-12">
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+              <i class="fas fa-history text-blue-500"></i>
+              发展时间轴
+            </h3>
+            <div class="relative">
+              {/* Timeline line */}
+              <div class="timeline-line hidden md:block"></div>
+              
+              {timelineEvents.map((event: any, index: number) => {
+                const isLeft = index % 2 === 0
+                const aspectRatios = ['aspect-square', 'aspect-[4/5]', 'aspect-video']
+                const randomAspect = aspectRatios[Math.floor(Math.random() * aspectRatios.length)]
+                
+                return (
+                  <div class={`relative mb-12 md:mb-16 ${isLeft ? 'md:pr-[calc(50%+2rem)]' : 'md:pl-[calc(50%+2rem)]'}`}>
+                    {/* Timeline dot */}
+                    <div 
+                      class={`timeline-dot hidden md:block ${event.milestone ? 'timeline-milestone bg-indigo-600' : 'bg-gray-400'}`}
+                      style="top: 2rem;"
+                    ></div>
+                    
+                    <div class={`bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ${isLeft ? 'md:text-right' : ''}`}>
+                      {/* Date badge */}
+                      <div class={`px-4 py-2 bg-gradient-to-r ${event.milestone ? 'from-indigo-500 to-purple-500' : 'from-gray-400 to-gray-500'}`}>
+                        <span class="text-white font-bold text-sm">
+                          {formatDate(event.date)}
+                        </span>
+                        {event.milestone && (
+                          <i class="fas fa-star ml-2 text-yellow-300"></i>
+                        )}
+                      </div>
+                      
+                      {event.image_url && (
+                        <div class={`${randomAspect} bg-gray-200 overflow-hidden`}>
+                          <img 
+                            src={event.image_url} 
+                            alt={event.title}
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                      )}
+                      
+                      <div class="p-6">
+                        <h4 class="font-bold text-xl mb-2">{event.title}</h4>
+                        {event.description && (
+                          <p class="text-gray-600">{event.description}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+        
+        {/* Vote Section */}
+        <div class="mb-12 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border-2 border-purple-200">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h3 class="text-2xl font-bold mb-2 flex items-center gap-2">
+                <i class="fas fa-vote-yea text-purple-600"></i>
+                社区投票
+              </h3>
+              <p class="text-gray-600">
+                喜欢这个工作室？为它投票支持！参与决策工作室的未来发展方向。
+              </p>
+            </div>
+            <a 
+              href="https://snapshot.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-8 py-4 bg-purple-600 text-white rounded-full font-bold hover:bg-purple-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2"
+            >
+              <i class="fas fa-external-link-alt"></i>
+              前往投票
+            </a>
           </div>
         </div>
         
         {/* Images Gallery */}
         {studio.images && studio.images.length > 0 && (
           <div class="mb-12">
-            <h3 class="text-2xl font-bold mb-6">作品展示</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {studio.images.map((image, idx) => (
-                <div 
-                  class={`relative overflow-hidden rounded-xl bg-gray-200 ${
-                    idx === 0 ? 'md:col-span-2 aspect-[16/9]' : 'aspect-square'
-                  }`}
-                >
-                  <img 
-                    src={image.url} 
-                    alt={image.alt_text || studio.name}
-                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
-                  />
-                  {image.alt_text && (
-                    <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-3 text-sm">
-                      {image.alt_text}
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+              <i class="fas fa-images text-green-500"></i>
+              作品展示
+            </h3>
+            <div class="masonry-grid-detail">
+              {studio.images.map((image: any) => {
+                const aspectRatios = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[16/9]']
+                const randomAspect = aspectRatios[Math.floor(Math.random() * aspectRatios.length)]
+                
+                return (
+                  <div class="masonry-item-detail">
+                    <div class={`${randomAspect} bg-gray-200 overflow-hidden rounded-xl shadow-lg relative group cursor-pointer`}>
+                      <img 
+                        src={image.url} 
+                        alt={image.alt_text || studio.name}
+                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                      {image.alt_text && (
+                        <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-3 text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                          {image.alt_text}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}
@@ -392,6 +379,13 @@ function formatMarkdown(text: string): string {
     .replace(/\n\n/g, '</p><p class="mb-4">')
     .replace(/^(?!<[h|l])/gim, '<p class="mb-4">')
     .replace(/(?<![>])$/gim, '</p>')
+}
+
+// Helper function to format date
+function formatDate(dateStr: string): string {
+  const [year, month] = dateStr.split('-')
+  const months = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+  return `${year}年${months[parseInt(month) - 1]}`
 }
 
 // Helper function to get icon for link type
