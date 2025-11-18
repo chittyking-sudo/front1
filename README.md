@@ -326,11 +326,12 @@ npx wrangler pages deploy dist --project-name studio-network
 
 ## 访问地址
 
+- **GitHub 仓库**: https://github.com/chittyking-sudo/front1
 - **Sandbox环境**: https://3000-ilnel7c8p64wyz5cahyk6-3844e1b6.sandbox.novita.ai
 - **倒计时着陆页**: https://3000-ilnel7c8p64wyz5cahyk6-3844e1b6.sandbox.novita.ai/
 - **探索页面**: https://3000-ilnel7c8p64wyz5cahyk6-3844e1b6.sandbox.novita.ai/explore
 - **后台管理**: https://3000-ilnel7c8p64wyz5cahyk6-3844e1b6.sandbox.novita.ai/admin
-- **生产环境**: 待部署到 Cloudflare Pages
+- **生产环境**: 待通过 Cloudflare Dashboard 连接 GitHub 部署
 - **本地开发**: http://localhost:3000
 
 ## 主要页面
