@@ -113,12 +113,12 @@ export function HomePage({
           <div class="floating-element" style="text-align: center; z-index: 10; max-width: 1200px; width: 100%;">
             {/* Title */}
             <h1 style="font-size: 64px; font-weight: 700; color: white; margin-bottom: 16px; text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); line-height: 1.2;">
-              Segment Anything
+              非非想 无不为
             </h1>
             
             {/* Subtitle */}
             <p style="font-size: 28px; color: rgba(255, 255, 255, 0.85); margin-bottom: 64px; font-weight: 300; letter-spacing: 0.02em;">
-              A playground for interactive media
+              All for creation. Babystep first.
             </p>
             
             {/* Countdown Container */}
